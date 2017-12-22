@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="painterdrown&#39;s personal blog website.">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="painterdrown">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Kth Largest Element in an Array"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="painterdrown&#39;s personal blog website." />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="painterdrown Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Kth Largest Element in an Array - painterdrown Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">汝自远方来，不亦乐乎？</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Kth Largest Element in an Array</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2017-09-18
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/se/">#se</a> <a href="/tags/algorithm/">#algorithm</a> <a href="/tags/c/">#c</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>本博客作为《算法与设计》课程第二周的作业</li>
+<li>题目来源：<a href="https://leetcode.com/problems/kth-largest-element-in-an-array" target="_blank" rel="external">LeetCode 215</a></li>
+<li>题目类型：Divide and Conquer</li>
+<li>编程语言：C</li>
+<li>运行结果：<img src="/se/kth-largest-element-in-an-array/imgs/1.png" alt=""></li>
+</ul>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.</p>
+<p>For example,<br>Given [3,2,1,5,6,4] and k = 2, return 5.</p>
+<p>Note:<br>You may assume k is always valid, 1 ≤ k ≤ array’s length.</p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>题目的要求很清晰，就是要求出一个整数数组中第k大的元素。<br>最容易想到的做法，也是最简单粗暴的做法，就是先从大到小排序，然后取排序后数组的第k个元素即可。</p>
+<p>但是仔细一想，这种做法是不是有点浪费了？你将一整个数组排好序，但最终只是利用了第k个元素。<br>所以我们是不是可以找出一个比较节能的算法，使得时间复杂度上做到更优呢？</p>
+<p>排序算法的时间复杂度最快是O(nlogn)，用Quicksort或者Mergesort可以做到。<br>观察一下这道题，从某种程度上来说，它的做法跟排序的做法应该区别不大。<br>Quicksort和Mergesort算法都是来源于分治思想，因此，我们可以以此为切入点。</p>
+<p>假如我们随机地从数组中选取一个元素作为主元（pivot），然后线性遍历一下数组，将其分成三个子数组：</p>
+<ul>
+<li>小于pivot的，记作[small]，假设其长度为small_len</li>
+<li>等于pivot的，记作[equal]，假设其长度为equal_len</li>
+<li>大于pivot的，记作[large]，假设其长度为large_len</li>
+</ul>
+<p>做完分组之后，我们可以这样表示原来的数组：[[small], [equal], [large]]。<br>后面为了实际操作的方便，我将表示为[[small], [large], [equal]]。</p>
+<p>接下来我们可以作出以下的分析：</p>
+<ul>
+<li>如果<strong>k &lt;= large_len</strong>，即有不止k个元素大于pivot，所以pivot是在要找的第k大的元素之后，此时我们继续递归地在[large]子数组中继续寻求第k大的元素</li>
+<li>如果<strong>large_len &lt; k &lt;= large_len + equal_length</strong>，即第k大的元素落在[equal]子区间内，也就是此时对应的pivot</li>
+<li>如果<strong>large_len + equal_length &lt; k</strong>，即[large]和[equal]两个数组的元素数目之和都没有k大，那么我们就还需要在[small]里面找到子数组的第(k - large_len - equal_len)大的元素</li>
+</ul>
+<p>上面三种情况对应的结果是：findKthLargest(初始数组, k) =</p>
+<ul>
+<li>findKthLargest(大于pivot的数组, k)</li>
+<li>pivot</li>
+<li>findKthLargest(小于pivot的数组, k - large_len - equal_len)</li>
+</ul>
+<p>算法其实不复杂，就是下面两步：</p>
+<ul>
+<li>STEP 1. 将数组划分成三个子数组，可参考Quicksort的划分算法<img src="/se/kth-largest-element-in-an-array/imgs/2.png" alt=""></li>
+</ul>
+<p>划分时，比Quicksort多出来的一步是：将与主元相等的元素交换到数组的最右边。这也是我上面提到为什么记成[[small], [large], [equal]]的原因了。</p>
+<ul>
+<li>STEP 2. 根据三个子数组的长度判断是否已经取到目标元素，若否则递归求解之</li>
+</ul>
+<p>时间复杂度上，</p>
+<ul>
+<li>最优的情况是每次取到的主元都是当前数组的中位数，这样能使原数组划分后的[large]和[small]的长度大致相同。T(n) = T(n/2) + O(n)，由大师定理得：时间复杂度是O(n)</li>
+<li>最坏的情况当然是每次都取到当前数组的最小值。T(n) = n + (n-1) + … + n/2 = O(n^2)，时间复杂度是O(n^2)</li>
+</ul>
+<p>因此我们定义一种“不错”的情况：选取的主元位置落在元素组的0.25到0.75之间（概率为50%，我们平均需要做两次选取主元操作才能选取到那个“不错”的主元），这时候的时间复杂度存在一个上界：</p>
+<p>T(n) &lt;= T(3n/4) + O(n)</p>
+<p>其中，T(3n/4)是指主元刚刚落在0.25或0.75这两个边界，O(n)是进行分组（线性遍历）时花费的时间。<br>根据大师定理可以得出对应的时间复杂度为O(n)。</p>
+<p>因此我们可以得出结论：</p>
+<ul>
+<li>该算法最坏情况下的时间复杂度为O(n^2)，但是发生的几率极低</li>
+<li>该算法最优情况下的时间复杂度为O(n)，发生的几率也很低</li>
+<li>该算法“不错”情况下的时间复杂度为O(n)，发生的几率很高，可以视作该算法的平均复杂度</li>
+</ul>
+<h2 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span> </span>&#123;</div><div class="line">  <span class="keyword">int</span> temp = *a;</div><div class="line">  *a = *b;</div><div class="line">  *b = temp;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">choosePivot</span><span class="params">(<span class="keyword">int</span> *nums, <span class="keyword">int</span> nums_len)</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> nums_len / <span class="number">2</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span> *nums, <span class="keyword">int</span> nums_len, <span class="keyword">int</span> *small_pos, <span class="keyword">int</span> *large_pos)</span> </span>&#123;</div><div class="line">  <span class="comment">// 选择主元</span></div><div class="line">  <span class="keyword">int</span> pivot_pos = choosePivot(nums, nums_len);</div><div class="line">  <span class="keyword">int</span> equal_count = <span class="number">1</span>;</div><div class="line">  <span class="keyword">int</span> last_small = <span class="number">0</span>;</div><div class="line">  </div><div class="line">  <span class="comment">// 将主元与数组首元素交换位置</span></div><div class="line">  swap(nums + <span class="number">0</span>, nums + pivot_pos);</div><div class="line"></div><div class="line">  <span class="comment">// 遍历数组，划分成三组</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= nums_len - equal_count; ++i) &#123;</div><div class="line">    <span class="keyword">if</span> (nums[i] &lt; nums[<span class="number">0</span>])</div><div class="line">      swap(nums + i, nums + ++last_small);</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (nums[i] == nums[<span class="number">0</span>])</div><div class="line">      swap(nums + i--, nums + nums_len - equal_count++);</div><div class="line">    <span class="keyword">else</span>;</div><div class="line">  &#125;</div><div class="line">  swap(nums + <span class="number">0</span>, nums + last_small);</div><div class="line">  swap(nums + last_small, nums + nums_len - equal_count);</div><div class="line"></div><div class="line">  <span class="comment">// 获取边界</span></div><div class="line">  *small_pos = last_small - <span class="number">1</span>;</div><div class="line">  *large_pos = nums_len - <span class="number">1</span> - equal_count;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">findKthLargest</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> nums_len, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">  <span class="keyword">int</span> small_pos, large_pos;</div><div class="line"></div><div class="line">  <span class="comment">// 对数组进行划分，得到三组的边界</span></div><div class="line">  partition(nums, nums_len, &amp;small_pos, &amp;large_pos);</div><div class="line">  <span class="keyword">int</span> small_len = small_pos + <span class="number">1</span>;</div><div class="line">  <span class="keyword">int</span> large_len = large_pos - small_pos;</div><div class="line">  <span class="keyword">int</span> equal_len = nums_len - <span class="number">1</span> - large_pos;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (k &lt;= large_len)</div><div class="line">    <span class="keyword">return</span> findKthLargest(nums + small_len, large_len, k);</div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (large_len &lt; k &amp;&amp; k &lt;= large_len + equal_len)</div><div class="line">    <span class="keyword">return</span> nums[nums_len - <span class="number">1</span>];</div><div class="line">  <span class="keyword">else</span></div><div class="line">    <span class="keyword">return</span> findKthLargest(nums, small_len, k - large_len - equal_len);</div><div class="line"></div><div class="line">  <span class="comment">// 如果是Kth Smallest</span></div><div class="line">  <span class="comment">// if (k &lt;= small_len) &#123;</span></div><div class="line">  <span class="comment">//   return findKthLargest(nums, small_len, k);</span></div><div class="line">  <span class="comment">// &#125;</span></div><div class="line">  <span class="comment">// else if (small_len &lt; k &amp;&amp; k &lt;= small_len + equal_len) &#123;</span></div><div class="line">  <span class="comment">//   return nums[nums_len - 1];</span></div><div class="line">  <span class="comment">// &#125;</span></div><div class="line">  <span class="comment">// else &#123;</span></div><div class="line">  <span class="comment">//   return findKthLargest(nums + small_len, large_len, k - small_len - equal_len);</span></div><div class="line">  <span class="comment">// &#125;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/PainterDrown" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="mailto:painterdrown@hotmail.com" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2017 painterdrown<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
