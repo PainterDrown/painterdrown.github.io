@@ -20,7 +20,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="painterdrown Blog"/>
+        <meta property="og:title" content="Minimum Path Sum (via Dijkstra)"/>
     
 
     <!--Open Graph Description-->
@@ -33,7 +33,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -44,7 +44,7 @@
 
     <!-- Title -->
     
-    <title>se - painterdrown Blog</title>
+    <title>Minimum Path Sum (via Dijkstra) - painterdrown Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -122,49 +122,92 @@
 </nav>
 
     <!-- Main Content -->
-    
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-<!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
 <header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>#se</h1>
+                <div class="post-heading">
+                    <h1>Minimum Path Sum (via Dijkstra)</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2017-12-18
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/algorithm/">#algorithm</a> <a href="/tags/c/">#c++</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
             
-                <div class="post-preview">
-    <a href="/se/kth-largest-element-in-an-array/">
-        <h1 class="post-title archive">
-            Kth Largest Element in an Array
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2017-09-18
-    </p>
-</div>
+
+            <!-- Gallery -->
             
-            <div class="archive-before-pagination"></div>
-            <ul class="pager">
-    
-    
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>本博客作为《算法与设计》课程第 16 周的作业</li>
+<li>题目来源：<a href="https://leetcode.com/problems/minimum-path-sum" target="_blank" rel="external">LeetCode #64</a></li>
+<li>题目类型：Greedy</li>
+<li>编程语言：C++</li>
 </ul>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p><img src="/algorithm/minimum-path-sum-via-dijkstra/images/description.png" alt=""></p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>Dijkstra 算法是典型的单源最短路径算法，用于计算一个节点到其他所有节点的最短路径。算法的基本思想是贪心算法，从源节点开始，不断地以最小代价向其他未到达的节点拓展，直到覆盖目标节点为止。</p>
+<p>在这个问题中，假设输入的矩阵是 matrix（m 行 n 列），算法的具体过程如下：</p>
+<ol>
+<li>初始化：<ul>
+<li>集合 A = { v0 }。v0 起点，A 代表代表已经到达的节点</li>
+<li>bool last[m][n] 用于记录达到该点的上一个点，true 表示上方的点，false 表示左边的点</li>
+</ul>
+</li>
+<li>从 A 中任意点开始走一步，假设最近到达的节点为 v，则将 v 加到集合 A 中</li>
+<li>重复步骤 2，直到终点也在 A 中</li>
+<li>最后根据 last 矩阵从终点追溯到起点，即可获取该最短路径，将路径上的值求和即为所求最短路径之和</li>
+</ol>
+<h2 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h2><p>这次算法比较简单因此不再赘述，参考下面的数据结构与上面的 4 个步骤即可。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> row;</div><div class="line">    <span class="keyword">int</span> col;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// 用于记录已经达到的 Node</span></div><div class="line"><span class="built_in">vector</span>&lt;Node&gt; A;</div><div class="line"></div><div class="line"><span class="comment">// 用于记录达到该 Node 的上一个 Node 的相对方向</span></div><div class="line"><span class="keyword">bool</span> **last = <span class="keyword">new</span> <span class="keyword">bool</span>*[m];</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</div><div class="line">  last[i] = <span class="keyword">new</span> <span class="keyword">bool</span>[n];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
         </div>
     </div>
-</div>
-
+</article>
 
     <!-- Footer -->
     <hr />
@@ -181,7 +224,7 @@
 
                     
                         <li>
-                            <a href="https://github.com/PainterDrown" target="_blank">
+                            <a href="https://github.com/painterdrown" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -206,8 +249,8 @@
                     
                 </ul>
                 <p class="copyright text-muted">&copy; 2017 painterdrown<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+                <!-- <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p> -->
             </div>
         </div>
     </div>

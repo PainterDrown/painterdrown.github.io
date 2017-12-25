@@ -157,7 +157,7 @@
                         
 
 
-<a href="/tags/se/">#se</a> <a href="/tags/algorithm/">#algorithm</a> <a href="/tags/c/">#c</a>
+<a href="/tags/algorithm/">#algorithm</a> <a href="/tags/c/">#c</a>
 
 
                     
@@ -173,11 +173,11 @@
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
-<li>本博客作为《算法与设计》课程第二周的作业</li>
-<li>题目来源：<a href="https://leetcode.com/problems/kth-largest-element-in-an-array" target="_blank" rel="external">LeetCode 215</a></li>
+<li>本博客作为《算法与设计》课程第 2 周的作业</li>
+<li>题目来源：<a href="https://leetcode.com/problems/kth-largest-element-in-an-array" target="_blank" rel="external">LeetCode #215</a></li>
 <li>题目类型：Divide and Conquer</li>
 <li>编程语言：C</li>
-<li>运行结果：<img src="/se/kth-largest-element-in-an-array/imgs/1.png" alt=""></li>
+<li>运行结果：<img src="/algorithm/kth-largest-element-in-an-array/images/result.png" alt=""></li>
 </ul>
 <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.</p>
 <p>For example,<br>Given [3,2,1,5,6,4] and k = 2, return 5.</p>
@@ -206,7 +206,7 @@
 </ul>
 <p>算法其实不复杂，就是下面两步：</p>
 <ul>
-<li>STEP 1. 将数组划分成三个子数组，可参考Quicksort的划分算法<img src="/se/kth-largest-element-in-an-array/imgs/2.png" alt=""></li>
+<li>STEP 1. 将数组划分成三个子数组，可参考Quicksort的划分算法<img src="/algorithm/kth-largest-element-in-an-array/images/partition.png" alt=""></li>
 </ul>
 <p>划分时，比Quicksort多出来的一步是：将与主元相等的元素交换到数组的最右边。这也是我上面提到为什么记成[[small], [large], [equal]]的原因了。</p>
 <ul>
@@ -258,7 +258,7 @@
 
                     
                         <li>
-                            <a href="https://github.com/PainterDrown" target="_blank">
+                            <a href="https://github.com/painterdrown" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -283,8 +283,8 @@
                     
                 </ul>
                 <p class="copyright text-muted">&copy; 2017 painterdrown<br></p>
-                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
-                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+                <!-- <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p> -->
             </div>
         </div>
     </div>
