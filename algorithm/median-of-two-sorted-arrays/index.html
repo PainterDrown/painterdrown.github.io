@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="Where painterdrown Shares.">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="painterdrown">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Median of Two Sorted Arrays"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="Where painterdrown Shares." />
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="painterdrown Blog"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+
+    <!-- Title -->
+    
+    <title>Median of Two Sorted Arrays - painterdrown Blog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">汝自远方来，不亦乐乎？</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Median of Two Sorted Arrays</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2018-01-08
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/algorithm/">#algorithm</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>本博客作为《算法与设计》课程第 18 周的作业</li>
+<li>题目来源：<a href="https://leetcode.com/problems/median-of-two-sorted-arrays" target="_blank" rel="external">LeetCode #4</a></li>
+<li>题目类型：Divide and Conquer</li>
+<li>编程语言：C++</li>
+<li>运行结果：<img src="/algorithm/median-of-two-sorted-arrays/images/result.png" alt=""></li>
+</ul>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p><img src="/algorithm/median-of-two-sorted-arrays/images/description.png" alt=""></p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><h3 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h3><p>假设两个数组总共有 (m+n) 个元素，那么显然我们有用 O(m) 时间和 O(n) 空间的方法：用 Merge Sort 的思路排序，排序好的数组取出下标为 (m+n)/2 的元素就是我们需要的答案。</p>
+<p>这个方法比较容易想到，但是时间复杂度是 O(m+n)，而题目要求的是 O(log(m+n))。所以还是想办法另辟蹊径！</p>
+<h3 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h3><p>我们可以发现，现在我们是不需要“排序”这么复杂的操作的，因为我们仅仅需要中位数。我们可以用一个计数器，记录当前已经找到第 m 大的元素了。同时我们使用两个指针 pA 和 pB，分别指向 A 和 B 数组的第一个元素。</p>
+<p>使用类似于 Merge Sort 的原理：</p>
+<ul>
+<li>如果数组 A 当前元素小，那么 pA++，同时 m++。</li>
+<li>如果数组 B 当前元素小，那么 pB++，同时 m++。</li>
+</ul>
+<p>最终当 m 等于 (m+n)/2 的时候，就找到所求元素了。</p>
+<p>但是！时间复杂度还是跟方案一一样，还是得继续脑洞！</p>
+<h3 id="方案三"><a href="#方案三" class="headerlink" title="方案三"></a>方案三</h3><p>将原问题转变成一个寻找第 k 小数的问题（假设两个原序列升序排列），这样中位数实际上是第 (m+n)/2 小的数。所以只要解决了第 k 小数的问题，原问题也得以解决。</p>
+<p>首先假设数组 A 和 B 的元素个数都大于 k/2，我们比较 A[k/2-1] 和 B[k/2-1] 两个元素，这两个元素分别表示 A 的第 k/2 小的元素和 B 的第 k/2 小的元素。这两个元素比较共有三种情况：&gt;、&lt; 和 =。</p>
+<p>如果 A[k/2-1] &lt; B[k/2-1]，这表示 A[0] 到 A[k/2-1] 的元素都在A和B合并之后的前 k 小的元素中。换句话说，A[k/2-1] 不可能大于两数组合并之后的第k小值，所以我们可以将其抛弃。</p>
+<p>证明也很简单，可以采用反证法。假设 A[k/2-1] 大于合并之后的第k小值，我们不妨假定其为第 (k+1) 小值。由于 A[k/2-1] 小于 B[k/2-1]，所以 B[k/2-1] 至少是第 (k+2) 小值。但实际上，在 A 中至多存在 k/2-1 个元素小于 A[k/2-1]，B 中也至多存在 k/2-1 个元素小于 A[k/2-1]，所以小于 A[k/2-1] 的元素个数至多有 k/2+k/2-2，小于 k，这与 A[k/2-1] 是第 (k+1) 的数矛盾。</p>
+<ul>
+<li>当 A[k/2-1] &gt; B[k/2-1] 时，存在类似的结论。</li>
+<li>当 A[k/2-1] = B[k/2-1] 时，我们已经找到了第 k 小的数，也即这个相等的元素，我们将其记为 m。由于在 A 和 B 中分别有 k/2-1 个元素小于 m，所以 m 即是第 k 小的数。</li>
+</ul>
+<p>这里可能有人会有疑问，如果 k 为奇数，则 m 不是中位数。这里是进行了理想化考虑，在实际代码中略有不同，是先求 k/2，然后利用 k-k/2 获得另一个数。</p>
+<p>通过上面的分析，我们即可以采用递归的方式实现寻找第 k 小的数。此外我们还需要考虑几个边界条件：</p>
+<ul>
+<li>如果 A 或者 B 为空，则直接返回 B[k-1] 或者 A[k-1]</li>
+<li>如果 k 为 1，我们只需要返回 A[0] 和 B[0] 中的较小值</li>
+<li>如果 A[k/2-1] = B[k/2-1]，返回其中一个</li>
+</ul>
+<h2 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">double</span> <span class="title">findMedianSortedArrays</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums2)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = nums1.size();</div><div class="line">        <span class="keyword">int</span> m = nums2.size();</div><div class="line">        <span class="keyword">if</span>(n &gt; m)   <span class="comment">//保证数组1一定最短</span></div><div class="line">            <span class="keyword">return</span> findMedianSortedArrays(nums2,nums1);</div><div class="line">        <span class="keyword">int</span> L1,L2,R1,R2,c1,c2,lo = <span class="number">0</span>, hi = <span class="number">2</span>*n;  <span class="comment">//我们目前是虚拟加了'#'所以数组1是2*n长度</span></div><div class="line">        <span class="keyword">while</span>(lo &lt;= hi)   <span class="comment">//二分</span></div><div class="line">        &#123;</div><div class="line">            c1 = (lo+hi)/<span class="number">2</span>;  <span class="comment">//c1是二分的结果</span></div><div class="line">            c2 = m+n- c1;</div><div class="line">            L1 = (c1 == <span class="number">0</span>)?INT_MIN:nums1[(c1<span class="number">-1</span>)/<span class="number">2</span>];   <span class="comment">//map to original element</span></div><div class="line">            R1 = (c1 == <span class="number">2</span>*n)?INT_MAX:nums1[c1/<span class="number">2</span>];</div><div class="line">            L2 = (c2 == <span class="number">0</span>)?INT_MIN:nums2[(c2<span class="number">-1</span>)/<span class="number">2</span>];</div><div class="line">            R2 = (c2 == <span class="number">2</span>*m)?INT_MAX:nums2[c2/<span class="number">2</span>];</div><div class="line"></div><div class="line">            <span class="keyword">if</span>(L1 &gt; R2)</div><div class="line">                hi = c1<span class="number">-1</span>;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(L2 &gt; R1)</div><div class="line">                lo = c1+<span class="number">1</span>;</div><div class="line">            <span class="keyword">else</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> (max(L1,L2)+ min(R1,R2))/<span class="number">2.0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/painterdrown" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="mailto:painterdrown@hotmail.com" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2018 painterdrown<br></p>
+                <!-- <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p> -->
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
