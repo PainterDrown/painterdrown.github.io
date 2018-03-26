@@ -168,20 +168,3 @@ pre .clojure .title {
 pre .deletion {
   color: #dc322f;
 }
-table {
-  border: 1px solid #d3d3d3;
-  background: #fefefe;
-  margin: 5% auto 0;
-  border-radius: 5px;
-}
-table th {
-  padding: 18px 28px 18px;
-  padding-top: 22px;
-  background: #e8eaeb;
-  border-right: 1px solid #e0e0e0;
-}
-table td {
-  text-align: center;
-  border-top: 1px solid #e0e0e0;
-  border-right: 1px solid #e0e0e0;
-}

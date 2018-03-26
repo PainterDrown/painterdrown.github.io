@@ -20,7 +20,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="painterdrown Blog"/>
+        <meta property="og:title" content="计算机视觉学习笔记：起步"/>
     
 
     <!--Open Graph Description-->
@@ -33,7 +33,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
     
 
     <!--Page Cover-->
@@ -44,7 +44,7 @@
 
     <!-- Title -->
     
-    <title>Archiv: 2017/11 - painterdrown Blog</title>
+    <title>计算机视觉学习笔记：起步 - painterdrown Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -122,88 +122,104 @@
 </nav>
 
     <!-- Main Content -->
-    
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
 
-<!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
 <header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>2017/11</h1>
+                <div class="post-heading">
+                    <h1>计算机视觉学习笔记：起步</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2018-03-27
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+
+<a href="/tags/cv/">#cv</a>
+
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
             
-                <div class="post-preview">
-    <a href="/algorithm/regular-expression-matching-via-recursion/">
-        <h1 class="post-title archive">
-            Regular Expression Matching (via Recursion)
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2017-11-27
-    </p>
-</div>
+
+            <!-- Gallery -->
             
-                <div class="post-preview">
-    <a href="/algorithm/regular-expression-matching-via-dp/">
-        <h1 class="post-title archive">
-            Regular Expression Matching (via DP)
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2017-11-27
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/algorithm/3sum-closest/">
-        <h1 class="post-title archive">
-            3Sum Closest
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2017-11-13
-    </p>
-</div>
-            
-                <div class="post-preview">
-    <a href="/algorithm/3sum/">
-        <h1 class="post-title archive">
-            3Sum
-        </h1>
-    </a>
-    <p class="post-meta archive">
-        <!-- Date and Author -->
-        
-        2017-11-06
-    </p>
-</div>
-            
-            <div class="archive-before-pagination"></div>
-            <ul class="pager">
-    
-    
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>今晚实验室老师开会，说打算开始带我和另外一位同学做 CV 以及神经网络。为了更系统地学习和记忆，接下来我打以博客的形式记录下学习过程及心得等等。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
+<p><a href="http://open.163.com/special/opencourse/machinelearning.html" target="_blank" rel="external">吴恩达 (Andrew Ng) 关于机器学习的公开课</a></p>
+</blockquote>
+<blockquote>
+<p><a href="http://www.ee.cuhk.edu.hk/~xgwang/" target="_blank" rel="external">王晓刚（香港中文大学）教授关于深度学习的课程</a></p>
+</blockquote>
+<h2 id="安装-OpenCV"><a href="#安装-OpenCV" class="headerlink" title="安装 OpenCV"></a>安装 OpenCV</h2><p>师兄提到玩计算机视觉必定要碰 OpenCV，所以这里讲一下我的安装过程。由于我用的是 macOS，比较方便的做法是：Xcode + OpenCV 的环境。</p>
+<ol>
+<li><p>使用 brew 安装：<code>brew install opencv</code></p>
+</li>
+<li><p>安装完之后，可以看到以下目录及文件：</p>
+<ul>
+<li>/usr/local/Cellar/opencv</li>
+<li>/usr/local/include</li>
+<li>/usr/local/lib</li>
 </ul>
+</li>
+<li><p>Xcode 新建命令行程序项目，在工程文件下进行以下设置：</p>
+<ul>
+<li>Build Phases -&gt; Link Binary With Libraries 添加 /usr/local/Cellar/opencv/&lt;版本&gt;/lib 中的所有 .dylib 文件</li>
+</ul>
+<p><img src="/cv/get-started/images/setting-1.png" alt="Build Phases"></p>
+<ul>
+<li>Build Settings -&gt; Search Paths 添加 /usr/local/include 和 /usr/local/lib</li>
+</ul>
+<p><img src="/cv/get-started/images/setting-2.png" alt="Build Settings"></p>
+</li>
+<li><p>配置完毕，在 cpp 文件直接：<code>#include &quot;opencv2/opencv.hpp&quot;</code>，测试代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"opencv2/opencv.hpp"</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</div><div class="line">    Mat image;</div><div class="line">    image = imread(<span class="string">"test.jpeg"</span>);  <span class="comment">// 这里换成图片的绝对路径</span></div><div class="line">    namedWindow(<span class="string">"Hello OpenCV!"</span>, WINDOW_AUTOSIZE);</div><div class="line">    imshow(<span class="string">"Hello OpenCV!"</span>, image);</div><div class="line">    waitKey(<span class="number">0</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
         </div>
     </div>
-</div>
-
+</article>
 
     <!-- Footer -->
     <hr />
