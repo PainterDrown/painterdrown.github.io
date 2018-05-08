@@ -20,7 +20,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="计算机视觉学习笔记：起步"/>
+        <meta property="og:title" content="系统分析与设计 Assignment 3"/>
     
 
     <!--Open Graph Description-->
@@ -44,7 +44,7 @@
 
     <!-- Title -->
     
-    <title>计算机视觉学习笔记：起步 - painterdrown Blog</title>
+    <title>系统分析与设计 Assignment 3 - painterdrown Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -130,13 +130,13 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <h1>计算机视觉学习笔记：起步</h1>
+                    <h1>系统分析与设计 Assignment 3</h1>
                     
                     <span class="meta">
                         <!-- Date and Author -->
                         
                         
-                            2018-03-27
+                            2018-04-10
                         
                     </span>
                 </div>
@@ -157,7 +157,7 @@
                         
 
 
-<a href="/tags/cv/">#cv</a>
+<a href="/tags/saad/">#saad</a>
 
 
                     
@@ -172,53 +172,55 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h1 id="计算机视觉学习笔记：起步"><a href="#计算机视觉学习笔记：起步" class="headerlink" title="计算机视觉学习笔记：起步"></a>计算机视觉学习笔记：起步</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>今晚实验室老师开会，说打算开始带我和另外一位同学做 CV 以及神经网络。为了更系统地学习和记忆，接下来我打以博客的形式记录下学习过程及心得等等。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
-<p><a href="http://open.163.com/special/opencourse/machinelearning.html" target="_blank" rel="external">吴恩达 (Andrew Ng) 关于机器学习的公开课</a></p>
-</blockquote>
-<blockquote>
-<p><a href="http://www.ee.cuhk.edu.hk/~xgwang/" target="_blank" rel="external">王晓刚（香港中文大学）教授关于深度学习的课程</a></p>
-</blockquote>
-<h2 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h2><p>师兄提到玩计算机视觉必定要碰 OpenCV，所以这里讲一下我的安装过程。</p>
-<h3 id="OpenCV-amp-C"><a href="#OpenCV-amp-C" class="headerlink" title="OpenCV &amp; C++"></a>OpenCV &amp; C++</h3><p>由于我用的是 macOS，比较方便的做法是：Xcode + OpenCV 的环境。</p>
-<ol>
-<li><p>使用 brew 安装：<code>brew install opencv</code></p>
-</li>
-<li><p>安装完之后，可以看到以下目录及文件：</p>
+                <h1 id="UML-活动图、用例图的学习笔记"><a href="#UML-活动图、用例图的学习笔记" class="headerlink" title="UML 活动图、用例图的学习笔记"></a>UML 活动图、用例图的学习笔记</h1><h2 id="UML-活动图"><a href="#UML-活动图" class="headerlink" title="UML 活动图"></a>UML 活动图</h2><p>我们在进行项目的时候，通过使用 UML 的面向对象图的方式来更明确、清晰的表达项目中的架设思想、项目结构、执行顺序等一些逻辑思维。UML 支持面向对象的技术，能够准确的方便地表达面向对像的概念，体现面向对象的分析和设计风格。</p>
+<p>UML 的模型主要有三部分构成：</p>
 <ul>
-<li>/usr/local/Cellar/opencv</li>
-<li>/usr/local/include</li>
-<li>/usr/local/lib</li>
+<li>事物(Things)：UML模型中最基本的构成元素，是具有代表性的成分的抽象；</li>
+<li>关系(Relationships)：关系把事物紧密联系在一起；</li>
+<li>图(Diagrams )：图是事物和关系的可视化表示。</li>
 </ul>
-</li>
-<li><p>Xcode 新建命令行程序项目，在工程文件下进行以下设置：</p>
+<p>UML中有九种建模的图标，即：用例图、类图、对象图、顺序图、协作图、状态图、活动图、组件图、配置图。</p>
+<h2 id="用例图（Use-Case-Diagram）"><a href="#用例图（Use-Case-Diagram）" class="headerlink" title="用例图（Use Case Diagram）"></a>用例图（Use Case Diagram）</h2><h3 id="参与者"><a href="#参与者" class="headerlink" title="参与者"></a>参与者</h3><p>参与者的定义：</p>
 <ul>
-<li>Build Phases -&gt; Link Binary With Libraries 添加 /usr/local/Cellar/opencv/&lt;版本&gt;/lib 中的所有 .dylib 文件</li>
+<li>参与者可以是人或其他外界系统；</li>
+<li>参与者时用力的启动者，参与者处于用例的外部并且能够初始化一个用例并参与用例的执行过程，但它并不是系统的一部分；</li>
+<li>每个参与者可以参与一个或多个用例。</li>
 </ul>
-<p><img src="/cv/get-started/images/setting-1.png" alt="Build Phases"></p>
+<p>如何寻找系统的参与者：</p>
 <ul>
-<li>Build Settings -&gt; Search Paths 添加 /usr/local/include 和 /usr/local/lib</li>
+<li>谁或什么在使用系统；</li>
+<li>交互中，他们扮演什么角色；</li>
+<li>谁安装系统；</li>
+<li>谁启动和关闭系统；</li>
+<li>谁维护系统；</li>
+<li>与该系统交互的是什么系统；</li>
+<li>谁从系统获取信息，谁提供信息给系统。</li>
 </ul>
-<p><img src="/cv/get-started/images/setting-2.png" alt="Build Settings"></p>
-</li>
-<li><p>配置完毕，在 cpp 文件直接：<code>#include &quot;opencv2/opencv.hpp&quot;</code>，测试代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"opencv2/opencv.hpp"</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</div><div class="line">    Mat image;</div><div class="line">    image = imread(<span class="string">"test.jpeg"</span>);  <span class="comment">// 这里换成图片的绝对路径</span></div><div class="line">    namedWindow(<span class="string">"Hello OpenCV!"</span>, WINDOW_AUTOSIZE);</div><div class="line">    imshow(<span class="string">"Hello OpenCV!"</span>, image);</div><div class="line">    waitKey(<span class="number">0</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
+<h3 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h3><h4 id="包含关系-include"><a href="#包含关系-include" class="headerlink" title="包含关系 include"></a>包含关系 include</h4><p>把几个用例的公共步骤分离成一个单独被包含用例；包含用例称为客户用例，被包含用例称为提供者用例。用例A包含用例 B，将 A 称为基用例，B 称为被包含用例。基用例被连接在虚线箭头的尾部，箭头指向被包含用例，并在虚线处添加一个 include 标签以表示扩展关系。</p>
+<h4 id="扩展关系-Extend"><a href="#扩展关系-Extend" class="headerlink" title="扩展关系 Extend"></a>扩展关系 Extend</h4><p>扩展使得每个用例可以通过扩展用例向基用例中添加额外的行为来扩展基用例的功能，扩展关系可以把一些可选的操作独立封装在另外的用例中，避免基用例过于复杂。用例A扩展了用例 B，那么 A 称为扩展用例或子用例，B 表示为基用例。扩展用例被连接在虚线箭头的尾部，箭头指向基用例，并在虚线处添加一个 extend 表示扩展关系。</p>
+<h3 id="活动图的组成元素"><a href="#活动图的组成元素" class="headerlink" title="活动图的组成元素"></a>活动图的组成元素</h3><ol>
+<li>活动状态图（Activity）</li>
+<li>动作状态（Actions)</li>
+<li>动作状态约束（Action Constraints）</li>
+<li>动作流（Control Flow）</li>
+<li>开始节点（Initial Node）</li>
+<li>终止节点（Final Node）</li>
+<li>对象（Objects）</li>
+<li>数据存储对象</li>
+<li>对象流（Object）</li>
+<li>分支与合并（Decision and Merge Nodes</li>
+<li>分叉与汇合（Fork and Join Nodes）</li>
+<li>异常处理（Exception Handler）</li>
+<li>活动中断区域（Interruptible Activity Region）</li>
+<li>泳道（Partition）</li>
 </ol>
-<h3 id="OpenCV-amp-Python"><a href="#OpenCV-amp-Python" class="headerlink" title="OpenCV &amp; Python"></a>OpenCV &amp; Python</h3><p>最近在看《OpenCV 3 计算机视觉 Python 语言实现》，里面需要搭 OpenCV + Python 的环境，此外要需要引入外部模块 contrib。为了满足这些条件，这次是用源码编译安装的。</p>
-<ol>
-<li>获取源码</li>
-</ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/opencv/opencv.git</div><div class="line">git <span class="built_in">clone</span> https://github.com/opencv/opencv_contrib.git</div><div class="line"><span class="built_in">cd</span> opencv</div><div class="line">mkdir build</div><div class="line"><span class="built_in">cd</span> build</div></pre></td></tr></table></figure>
-<ol>
-<li>编译、安装</li>
-</ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cmake -D CMAKE_BUILD_TYPE=RELEASE \</div><div class="line">      -D CMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span> \</div><div class="line">      -D PYTHON2_PACKAGES_PATH=/usr/<span class="built_in">local</span>/lib/python2.7/site-packages \</div><div class="line">      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..</div><div class="line">make -j4</div><div class="line">sudo make install</div></pre></td></tr></table></figure>
-<ol>
-<li>添加 python 连接关系</li>
-</ol>
-<pre><code class="sh">
-</code></pre>
+<p>UML 活动图能够捕捉到该系统的动态行为，UML 中其它的四个图是用来显示从一个对象到另一个消息流，但活动图是用来显示消息流从一个活动到另一个活动图。活动图不仅用于可视化系统的动态性质，也可用于通过使用正向和逆向工程技术来构建可执行的系统。唯一缺少的东西在活动图的消息部分。它并不显示任何消息流程从一个活动到另一个。活动图是一段时间视为流程图。虽然图中看起来像一个流程图，但事实并非如此。它显示不同的流程，如并行，分支，并发单。</p>
+<p>以下是 UML 活动图目的描述：</p>
+<ul>
+<li>绘制活动流程系统。</li>
+<li>描述的顺序从一个活动到另一个。</li>
+<li>描述系统并行，分支，并发流。</li>
+</ul>
 
 
                 
