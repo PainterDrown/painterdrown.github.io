@@ -1,8 +1,8 @@
 # [painterdrown Blog](https://painterdrown.github.io)
 
-> 🤴🏻 painterdrown
-> ⛩ SYSU Software Engineering
-> 👨🏻‍💻 [GitHub](https://github.com/painterdrown)
+> 🤴🏻 painterdrown<br/>
+> ⛩ SYSU Software Engineering<br/>
+> 👨🏻‍💻 [GitHub](https://github.com/painterdrown)<br/>
 > 💌 [painterdrown@hotmail.com](mailto:painterdrown@hotmail.com)
 
 ## Interests
