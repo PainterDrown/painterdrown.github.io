@@ -8,7 +8,7 @@
 ## Interests
 
 + 👀 [Computer Vision](https://painterdrown.github.io/cv)
-+ 🤵🏻 [System Analysis & Design (homework)](https://painterdrown.github.io/saad)
++ 🤵🏻 [System Analysis & Design](https://painterdrown.github.io/saad)
 + 🏖 [Travel](https://painterdrown.github.io/travel)
 
 ![](index/images/me.jpg)
