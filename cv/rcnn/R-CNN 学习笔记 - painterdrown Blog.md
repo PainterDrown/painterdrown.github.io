@@ -1,6 +1,6 @@
 [painterdrown Blog](https://painterdrown.github.io) - [painterdrown CV](https://painterdrown.github.io/cv)
 
-# R-CNN - Notes
+# R-CNN 学习笔记
 
 > ⏰ 2018-05-10 19:16:27<br/>
 > 👨🏻‍💻 painterdrown

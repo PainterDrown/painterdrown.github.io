@@ -1,6 +1,6 @@
 [painterdrown Blog](https://painterdrown.github.io) - [painterdrown CV](https://painterdrown.github.io/cv)
 
-# MobileNets - Notes
+# MobileNets 学习笔记
 
 > ⏰ 2018-05-28 13:02:24<br/>
 > 👨🏻‍💻 painterdrown
