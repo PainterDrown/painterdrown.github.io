@@ -2,19 +2,19 @@
 <html>
 <head>
 <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
-<title>系统分析与设计 Assignment 6 - painterdrown Blog</title><link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}#write, body { height: auto; }
+<title>SAAD Assignment 6</title><link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}#write, body { height: auto; }
 #write, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write ol, #write p, #write ul { position: relative; }
 #write, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+h1, h2, h3, h4, h5, h6, tr { break-inside: avoid; }
 #write, pre { white-space: pre-wrap; }
 .CodeMirror, .md-fences, table { text-align: left; }
 .md-reset, a:active, a:hover { outline: 0px; }
-.md-reset, .md-toc-item a { text-decoration: none; }
 .MathJax_SVG, .md-reset { float: none; direction: ltr; }
-:root { --bg-color: #ffffff; --text-color: #333333; }
+:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; }
 html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 body { margin: 0px; padding: 0px; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857143; overflow-x: hidden; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; background-position: inherit inherit; background-repeat: inherit inherit; }
 a.url { word-break: break-all; }
-.in-text-selection, ::selection { background-color: rgb(181, 214, 252); text-shadow: none; background-position: initial initial; background-repeat: initial initial; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
 #write { margin: 0px auto; word-break: normal; word-wrap: break-word; padding-bottom: 70px; overflow-x: visible; }
 .first-line-indent #write p .md-line { text-indent: 0px; }
 .first-line-indent #write li, .first-line-indent #write p, .first-line-indent #write p .md-line:first-child { text-indent: 2em; }
@@ -31,22 +31,26 @@ img { max-width: 100%; vertical-align: middle; }
 button, input, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; }
 input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
 *, ::after, ::before { box-sizing: border-box; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; orphans: 2; }
+p { orphans: 4; -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
 h1 { font-size: 2rem; }
 h2 { font-size: 1.8rem; }
 h3 { font-size: 1.6rem; }
 h4 { font-size: 1.4rem; }
 h5 { font-size: 1.2rem; }
 h6 { font-size: 1rem; }
-p { -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
 .mathjax-block { margin-top: 0px; margin-bottom: 0px; -webkit-margin-before: 0px; -webkit-margin-after: 0px; }
 .hidden { display: none; }
 .md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
 a { cursor: pointer; }
-sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.701961); color: rgb(85, 85, 85); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.701961); color: rgb(85, 85, 85); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+.md-reset, .md-toc-item a { text-decoration: none; }
 #write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
-#write > figure:first-child { margin-top: 16px; }
-figure { overflow-x: auto; margin: -8px 0px 0px -8px; max-width: calc(100% + 16px); padding: 8px; }
-tr { break-inside: avoid; break-after: auto; }
+#write > figure:first-child { margin-top: 2em; }
+figure { overflow-x: auto; margin: 1.2em 0px 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-after: auto; }
 thead { display: table-header-group; }
 table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; }
 .CodeMirror-line, .md-fences { break-inside: avoid; }
@@ -56,9 +60,9 @@ table.md-table td { min-width: 80px; }
 .CodeMirror pre { padding: 0px 4px; }
 .CodeMirror-lines { padding: 0px; }
 div.hr:focus { cursor: none; }
+pre.contain-cm { white-space: normal; }
 .md-fences { font-size: 0.9rem; display: block; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit inherit; background-repeat: inherit inherit; }
 .md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
-.md-fences .CodeMirror.CodeMirror-wrap { top: -1.6em; margin-bottom: -1.6em; }
 .md-fences.mock-cm { white-space: pre-wrap; }
 .show-fences-line-number .md-fences { padding-left: 0px; }
 .show-fences-line-number .md-fences.mock-cm { padding-left: 40px; }
@@ -71,14 +75,12 @@ blockquote { margin: 1rem 0px; }
 li .mathjax-block, li p { margin: 0.5rem 0px; }
 li { margin: 0px; position: relative; }
 blockquote > :last-child { margin-bottom: 0px; }
-blockquote > :first-child { margin-top: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
 .footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
 @media print { 
   body, html { border: 1px solid transparent; height: 99%; break-after: avoid-page; break-before: avoid-page; }
   #write { margin-top: 0px; border-color: transparent !important; }
   .typora-export * { -webkit-print-color-adjust: exact; }
-  h1, h2, h3, h4, h5, h6 { break-after: avoid-page; orphans: 2; }
-  p { orphans: 4; }
   html.blink-to-pdf { font-size: 13px; }
   .typora-export #write { padding-left: 1cm; padding-right: 1cm; padding-bottom: 0px; break-after: avoid-page; }
   .typora-export #write::after { height: 0px; }
@@ -287,14 +289,13 @@ li>ul {
     margin: 0 0;
 }
 hr {
-    height: 4px;
+    height: 2px;
     padding: 0;
     margin: 16px 0;
     background-color: #e7e7e7;
     border: 0 none;
     overflow: hidden;
     box-sizing: content-box;
-    border-bottom: 1px solid #ddd;
 }
 
 body > h2:first-child {
@@ -349,7 +350,7 @@ ol:last-child {
     margin-bottom: 0;
 }
 blockquote {
-    border-left: 4px solid #dddddd;
+    border-left: 4px solid #dfe2e5;
     padding: 0 15px;
     color: #777777;
 }
@@ -361,23 +362,24 @@ table {
     word-break: initial;
 }
 table tr {
-    border-top: 1px solid #cccccc;
+    border-top: 1px solid #dfe2e5;
     margin: 0;
     padding: 0;
 }
-table tr:nth-child(2n) {
+table tr:nth-child(2n),
+thead {
     background-color: #f8f8f8;
 }
 table tr th {
     font-weight: bold;
-    border: 1px solid #cccccc;
+    border: 1px solid #dfe2e5;
     border-bottom: 0;
     text-align: left;
     margin: 0;
     padding: 6px 13px;
 }
 table tr td {
-    border: 1px solid #cccccc;
+    border: 1px solid #dfe2e5;
     text-align: left;
     margin: 0;
     padding: 6px 13px;
@@ -398,7 +400,7 @@ table tr td:last-child {
 .md-fences,
 code,
 tt {
-    border: 1px solid #ddd;
+    border: 1px solid #dfe2e5;
     background-color: #f8f8f8;
     border-radius: 3px;
     padding: 0;
@@ -542,8 +544,8 @@ header, .context-menu, .megamenu-content, footer{
 </style>
 </head>
 <body class='typora-export' >
-<div  id='write'  class = 'is-mac'><h1><a name='header-n31' class='md-header-anchor '></a>系统分析与设计 Assignment 6</h1><blockquote><p>⏰ 2018-05-04 20:44:41<br/>
-👨🏻‍💻 painterdrown</p></blockquote><h2><a name='header-n37' class='md-header-anchor '></a>使用 UML State Model</h2><p>建模对象： 参考 Asg_RH 文档， 对 Reservation/Order 对象建模。
-建模要求： 参考练习不能提供足够信息帮助你对订单对象建模，请参考现在 定旅馆 的旅游网站，尽可能分析围绕订单发生的各种情况，直到订单通过销售事件（柜台销售）结束订单。</p><p>状态集合 S = { wating for check up, checked up, paid, granted, invoiced }。</p><p>事件集合 E = { new reservation, make changes, check the order, pay for the order, manager grant, invoice, user cancel, time out, manager cancel }。</p><p><img src='images/usm.png' alt='usm' referrerPolicy='no-referrer' /></p><h2><a name='header-n47' class='md-header-anchor '></a>研究天猫退货流程活动图，对退货业务对象状态建模</h2><p><img src='images/taobao.png' alt='tianmao' referrerPolicy='no-referrer' /></p></div>
+<div  id='write'  class = 'is-mac'><p><a href='https://painterdrown.github.io'>painterdrown Blog</a> - <a href='https://painterdrown.github.io/saad'>painterdrown SAAD</a></p><h1><a name='header-n3' class='md-header-anchor '></a>SAAD Assignment 6</h1><blockquote><p>⏰ 2018-05-04 20:44:41<br/>
+👨🏻‍💻 painterdrown</p></blockquote><h2><a name='header-n8' class='md-header-anchor '></a>使用 UML State Model</h2><p>建模对象： 参考 Asg_RH 文档， 对 Reservation/Order 对象建模。
+建模要求： 参考练习不能提供足够信息帮助你对订单对象建模，请参考现在 定旅馆 的旅游网站，尽可能分析围绕订单发生的各种情况，直到订单通过销售事件（柜台销售）结束订单。</p><p>状态集合 S = { wating for check up, checked up, paid, granted, invoiced }。</p><p>事件集合 E = { new reservation, make changes, check the order, pay for the order, manager grant, invoice, user cancel, time out, manager cancel }。</p><p><img src='images/usm.png' alt='usm' referrerPolicy='no-referrer' /></p><h2><a name='header-n18' class='md-header-anchor '></a>研究天猫退货流程活动图，对退货业务对象状态建模</h2><p><img src='images/taobao.png' alt='tianmao' referrerPolicy='no-referrer' /></p></div>
 </body>
 </html>

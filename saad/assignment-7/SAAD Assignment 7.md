@@ -1,7 +1,11 @@
-# 系统分析与设计 Assignment 7（铁路 12306 App 建模练习）
+[painterdrown Blog](https://painterdrown.github.io) - [painterdrown SAAD](https://painterdrown.github.io/saad)
+
+# SAAD Assignment 7
 
 > ⏰ 2018-05-13 19:21:03<br/>
 > 👨🏻‍💻 painterdrown
+
+这次作业是关于铁路 12306 App 的建模练习。
 
 ## 用例图
 

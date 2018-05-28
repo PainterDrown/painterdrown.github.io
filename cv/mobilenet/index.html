@@ -1,0 +1,550 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>MobileNets - Notes</title><link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}#write, body { height: auto; }
+#write, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write ol, #write p, #write ul { position: relative; }
+#write, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+h1, h2, h3, h4, h5, h6, tr { break-inside: avoid; }
+#write, pre { white-space: pre-wrap; }
+.CodeMirror, .md-fences, table { text-align: left; }
+.md-reset, a:active, a:hover { outline: 0px; }
+.MathJax_SVG, .md-reset { float: none; direction: ltr; }
+:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857143; overflow-x: hidden; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; background-position: inherit inherit; background-repeat: inherit inherit; }
+a.url { word-break: break-all; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; word-break: normal; word-wrap: break-word; padding-bottom: 70px; overflow-x: visible; }
+.first-line-indent #write p .md-line { text-indent: 0px; }
+.first-line-indent #write li, .first-line-indent #write p, .first-line-indent #write p .md-line:first-child { text-indent: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+@media screen and (max-width: 500px) { 
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write > blockquote:first-child, #write > div:first-child, #write > ol:first-child, #write > p:first-child, #write > pre:first-child, #write > table:first-child, #write > ul:first-child { margin-top: 30px; }
+#write li > table:first-child { margin-top: -20px; }
+img { max-width: 100%; vertical-align: middle; }
+button, input, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; orphans: 2; }
+p { orphans: 4; -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.mathjax-block { margin-top: 0px; margin-bottom: 0px; -webkit-margin-before: 0px; -webkit-margin-after: 0px; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.701961); color: rgb(85, 85, 85); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+.md-reset, .md-toc-item a { text-decoration: none; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+#write > figure:first-child { margin-top: 2em; }
+figure { overflow-x: auto; margin: 1.2em 0px 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; }
+.CodeMirror-line, .md-fences { break-inside: avoid; }
+table.md-table td { min-width: 80px; }
+.CodeMirror-gutters { border-right-width: 0px; background-color: inherit; margin-right: 4px; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+pre.contain-cm { white-space: normal; }
+.md-fences { font-size: 0.9rem; display: block; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit inherit; background-repeat: inherit inherit; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+.md-fences.mock-cm { white-space: pre-wrap; }
+.show-fences-line-number .md-fences { padding-left: 0px; }
+.show-fences-line-number .md-fences.mock-cm { padding-left: 40px; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; vertical-align: top; text-shadow: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; background-position: 0px 0px; background-repeat: initial initial; }
+.md-toc-inner, a img, img a { cursor: pointer; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+@media print { 
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid-page; break-before: avoid-page; }
+  #write { margin-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 1cm; padding-right: 1cm; padding-bottom: 0px; break-after: avoid-page; }
+  .typora-export #write::after { height: 0px; }
+  @page { margin: 20mm 0px; }
+}
+.footnote-line { white-space: pre-wrap; margin-top: 0.714em; font-size: 0.7em; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background-color: rgb(204, 204, 204); display: block; overflow-x: hidden; background-position: initial initial; background-repeat: initial initial; }
+p > img:only-child { display: block; margin: auto; }
+.md-line > .md-image:only-child, p > .md-image:only-child { display: inline-block; width: 100%; text-align: center; }
+.mathjax-block:not(:empty)::after, .md-toc-content::after, .md-toc::after { display: none; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.mathjax-block { white-space: pre; overflow: hidden; width: 100%; }
+p + .mathjax-block { margin-top: -1.143rem; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; }
+.MathJax_SVG, .mathjax-block .MathJax_SVG_Display { text-indent: 0px; max-width: none; max-height: none; min-height: 0px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-inner:hover { }
+.md-toc-inner { display: inline-block; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) { 
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, tt { font-family: var(--monospace); }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; }
+a.md-print-anchor { border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; text-shadow: initial !important; background-position: 0px 0px !important; background-repeat: initial initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.mathjax-block .MathJax_SVG_Display { text-align: center; margin: 1em 0px; position: relative; min-width: 100%; width: auto; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: monospace; }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; min-width: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg, [lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; }
+
+
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Open Sans Regular'),url('file:///Users/painterdrown/Library/Application%20Support/abnerworks.Typora/themes/github/400.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: normal;
+    src: local('Open Sans Italic'),url('file:///Users/painterdrown/Library/Application%20Support/abnerworks.Typora/themes/github/400i.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Open Sans Bold'),url('file:///Users/painterdrown/Library/Application%20Support/abnerworks.Typora/themes/github/700.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: bold;
+    src: local('Open Sans Bold Italic'),url('file:///Users/painterdrown/Library/Application%20Support/abnerworks.Typora/themes/github/700i.woff') format('woff')
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write{
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 20px 30px 40px 30px;
+	padding-top: 20px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+body > *:first-child {
+    margin-top: 0 !important;
+}
+body > *:last-child {
+    margin-bottom: 0 !important;
+}
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    /*background: url("file:///Users/painterdrown/Library/Application%20Support/images/modules/styleguide/para.png") no-repeat 10px center;*/
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+body > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h3:first-child,
+body > h4:first-child,
+body > h5:first-child,
+body > h6:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+a:first-child h1,
+a:first-child h2,
+a:first-child h3,
+a:first-child h4,
+a:first-child h5,
+a:first-child h6 {
+    margin-top: 0;
+    padding-top: 0;
+}
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
+    margin-top: 0;
+}
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #dfe2e5;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-gutters {
+    border-right: 1px solid #ddd;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #dfe2e5;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 0.2em 1em;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media screen and (min-width: 914px) {
+    /*body {
+        width: 854px;
+        margin: 0 auto;
+    }*/
+}
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag{
+	color: inherit;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#md-notification:before {
+    top: 10px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+.html-for-mac .context-menu {
+    --item-hover-bg-color: #E6F0FE;
+}
+
+
+ .typora-export p, .typora-export .footnote-line {white-space: normal;} 
+</style>
+</head>
+<body class='typora-export' >
+<div  id='write'  class = 'is-mac'><p><a href='https://painterdrown.github.io'>painterdrown Blog</a> - <a href='https://painterdrown.github.io/cv'>painterdrown CV</a></p><h1><a name='header-n808' class='md-header-anchor '></a>MobileNets - Notes</h1><blockquote><p>⏰ 2018-05-28 13:02:24<br/>
+👨🏻‍💻 painterdrown</p></blockquote><div class='md-toc' mdtype='toc'><p class="md-toc-content"><span class="md-toc-item md-toc-h1" data-ref="n808"><a class="md-toc-inner" href="#header-n808">MobileNets - Notes</a></span><span class="md-toc-item md-toc-h2" data-ref="n814"><a class="md-toc-inner" href="#header-n814">0. Abstract</a></span><span class="md-toc-item md-toc-h2" data-ref="n820"><a class="md-toc-inner" href="#header-n820">1. Introduction</a></span><span class="md-toc-item md-toc-h2" data-ref="n827"><a class="md-toc-inner" href="#header-n827">2. Prior Work</a></span><span class="md-toc-item md-toc-h2" data-ref="n834"><a class="md-toc-inner" href="#header-n834">3. MobileNet Architecture</a></span><span class="md-toc-item md-toc-h3" data-ref="n837"><a class="md-toc-inner" href="#header-n837">3.1. Depthwise Separable Convolution</a></span><span class="md-toc-item md-toc-h3" data-ref="n859"><a class="md-toc-inner" href="#header-n859">3.2. Network Structure and Training</a></span><span class="md-toc-item md-toc-h3" data-ref="n867"><a class="md-toc-inner" href="#header-n867">3.3. Width Multiplier: Thinner Models</a></span><span class="md-toc-item md-toc-h3" data-ref="n872"><a class="md-toc-inner" href="#header-n872">3.4. Resolution Multiplier: Reduced Representation</a></span><span class="md-toc-item md-toc-h2" data-ref="n877"><a class="md-toc-inner" href="#header-n877">4. Resources</a></span></p></div><h2><a name='header-n814' class='md-header-anchor '></a>0. Abstract</h2><blockquote><p>MobileNets are based on a streamlined architecture that uses <strong>depthwise separable convolutions</strong> to build light weight deep neural networks.</p></blockquote><p>整篇论文高频出现一组词：<strong>depthwise separable convolutions（深度可分离卷积）</strong>，这也是 MobileNets 的核心——卷积分离可以大幅度减少计算量。</p><h2><a name='header-n820' class='md-header-anchor '></a>1. Introduction</h2><p><img src='images/introduction.png' alt='' referrerPolicy='no-referrer' /></p><p>目前的用于图像分类、目标识别的卷积神经网络模型，都不断地加深以及复杂化网络结构以追求更高的精度。很多现实中的应用其实对精度要求不是很苛刻，但同时又希望能做到实时的速度，特别是用于一些计算资源有限的设备上。</p><p>这篇论文主要介绍了 MobileNets 这个高效的网络架构，以及它的两个超参数：<strong>width multiplier</strong> &amp; <strong>resolution multiplier</strong> 来构建轻量、低延时、适用于移动设备和嵌入式设备的网络模型。</p><h2><a name='header-n827' class='md-header-anchor '></a>2. Prior Work</h2><p>在构建轻量高效的网络模型这一问题上，很多方法的原理基本可以分为两大类：对预训练出来的网络进行压缩 or 直接训练小网络。这篇论文将介绍如何合适地“挑选”一个小网络。</p><p>MobileNets 中使用 <strong>depthwise separable convolutions</strong> 的做法其实在在 Inception models 中已经有了，Flattened networks 也做过分解卷积，etc。</p><p>构造小网络的另外一种方法是 shrinking, factorizing or compressing pretrained networks。另外一个训练小网络的方法是 distillation（蒸馏），意思是先训练一个大网络出来，然后用这个大网络去 teach 出来一个小网络。</p><h2><a name='header-n834' class='md-header-anchor '></a>3. MobileNet Architecture</h2><p>在 MobileNets 中，核心无非是它的 <strong>depthwise separable filters</strong>，下面也将从 width multiplier &amp; resolution multiplier 两个超参数的角度来介绍其架构。</p><h3><a name='header-n837' class='md-header-anchor '></a>3.1. Depthwise Separable Convolution</h3><p>MobileNets 将标准的卷积层分解成两部分：</p><ol start='' ><li><strong>3*3 depthwise convolution</strong> 用于对输入进行过滤，输入为 <span class="MathJax_Preview"></span><span class="MathJax_SVG" id="MathJax-Element-1-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="12.568ex" height="2.227ex" viewBox="0 -755.9 5411.1 958.9" role="img" focusable="false" style="vertical-align: -0.472ex;"><defs><path stroke-width="0" id="E1-MJMATHI-44" d="M287 628Q287 635 230 637Q207 637 200 638T193 647Q193 655 197 667T204 682Q206 683 403 683Q570 682 590 682T630 676Q702 659 752 597T803 431Q803 275 696 151T444 3L430 1L236 0H125H72Q48 0 41 2T33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM703 469Q703 507 692 537T666 584T629 613T590 629T555 636Q553 636 541 636T512 636T479 637H436Q392 637 386 627Q384 623 313 339T242 52Q242 48 253 48T330 47Q335 47 349 47T373 46Q499 46 581 128Q617 164 640 212T683 339T703 469Z"></path><path stroke-width="0" id="E1-MJMATHI-46" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path><path stroke-width="0" id="E1-MJMAIN-22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path><path stroke-width="0" id="E1-MJMATHI-4D" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xlink:href="#E1-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E1-MJMATHI-46" x="1170" y="-213"></use><use xlink:href="#E1-MJMAIN-22C5" x="1679" y="0"></use><g transform="translate(2180,0)"><use xlink:href="#E1-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E1-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E1-MJMAIN-22C5" x="3859" y="0"></use><use xlink:href="#E1-MJMATHI-4D" x="4360" y="0"></use></g></svg></span><script type="math/tex" id="MathJax-Element-1">D_F · D_F · M</script></li><li><strong>1*1 pointwise convolution</strong> 用于对过滤的结果进行结合，输出为 <span class="MathJax_Preview"></span><span class="MathJax_SVG" id="MathJax-Element-2-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="12.189ex" height="2.227ex" viewBox="0 -755.9 5248.1 958.9" role="img" focusable="false" style="vertical-align: -0.472ex;"><defs><path stroke-width="0" id="E2-MJMATHI-44" d="M287 628Q287 635 230 637Q207 637 200 638T193 647Q193 655 197 667T204 682Q206 683 403 683Q570 682 590 682T630 676Q702 659 752 597T803 431Q803 275 696 151T444 3L430 1L236 0H125H72Q48 0 41 2T33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM703 469Q703 507 692 537T666 584T629 613T590 629T555 636Q553 636 541 636T512 636T479 637H436Q392 637 386 627Q384 623 313 339T242 52Q242 48 253 48T330 47Q335 47 349 47T373 46Q499 46 581 128Q617 164 640 212T683 339T703 469Z"></path><path stroke-width="0" id="E2-MJMATHI-46" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path><path stroke-width="0" id="E2-MJMAIN-22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path><path stroke-width="0" id="E2-MJMATHI-4E" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xlink:href="#E2-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E2-MJMATHI-46" x="1170" y="-213"></use><use xlink:href="#E2-MJMAIN-22C5" x="1679" y="0"></use><g transform="translate(2180,0)"><use xlink:href="#E2-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E2-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E2-MJMAIN-22C5" x="3859" y="0"></use><use xlink:href="#E2-MJMATHI-4E" x="4360" y="0"></use></g></svg></span><script type="math/tex" id="MathJax-Element-2">D_F · D_F · N</script></li></ol><p><img src='images/architecture.png' alt='' referrerPolicy='no-referrer' /></p><p>原先标准卷基层的计算量是：</p><p><span class="MathJax_Preview"></span><span class="MathJax_SVG" id="MathJax-Element-3-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="26.895ex" height="2.227ex" viewBox="0 -755.9 11579.7 958.9" role="img" focusable="false" style="vertical-align: -0.472ex;"><defs><path stroke-width="0" id="E3-MJMATHI-44" d="M287 628Q287 635 230 637Q207 637 200 638T193 647Q193 655 197 667T204 682Q206 683 403 683Q570 682 590 682T630 676Q702 659 752 597T803 431Q803 275 696 151T444 3L430 1L236 0H125H72Q48 0 41 2T33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM703 469Q703 507 692 537T666 584T629 613T590 629T555 636Q553 636 541 636T512 636T479 637H436Q392 637 386 627Q384 623 313 339T242 52Q242 48 253 48T330 47Q335 47 349 47T373 46Q499 46 581 128Q617 164 640 212T683 339T703 469Z"></path><path stroke-width="0" id="E3-MJMATHI-4B" d="M285 628Q285 635 228 637Q205 637 198 638T191 647Q191 649 193 661Q199 681 203 682Q205 683 214 683H219Q260 681 355 681Q389 681 418 681T463 682T483 682Q500 682 500 674Q500 669 497 660Q496 658 496 654T495 648T493 644T490 641T486 639T479 638T470 637T456 637Q416 636 405 634T387 623L306 305Q307 305 490 449T678 597Q692 611 692 620Q692 635 667 637Q651 637 651 648Q651 650 654 662T659 677Q662 682 676 682Q680 682 711 681T791 680Q814 680 839 681T869 682Q889 682 889 672Q889 650 881 642Q878 637 862 637Q787 632 726 586Q710 576 656 534T556 455L509 418L518 396Q527 374 546 329T581 244Q656 67 661 61Q663 59 666 57Q680 47 717 46H738Q744 38 744 37T741 19Q737 6 731 0H720Q680 3 625 3Q503 3 488 0H478Q472 6 472 9T474 27Q478 40 480 43T491 46H494Q544 46 544 71Q544 75 517 141T485 216L427 354L359 301L291 248L268 155Q245 63 245 58Q245 51 253 49T303 46H334Q340 37 340 35Q340 19 333 5Q328 0 317 0Q314 0 280 1T180 2Q118 2 85 2T49 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Z"></path><path stroke-width="0" id="E3-MJMAIN-22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path><path stroke-width="0" id="E3-MJMATHI-4D" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path><path stroke-width="0" id="E3-MJMATHI-4E" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path><path stroke-width="0" id="E3-MJMATHI-46" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xlink:href="#E3-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E3-MJMATHI-4B" x="1170" y="-213"></use><use xlink:href="#E3-MJMAIN-22C5" x="1778" y="0"></use><g transform="translate(2279,0)"><use xlink:href="#E3-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E3-MJMATHI-4B" x="1170" y="-213"></use></g><use xlink:href="#E3-MJMAIN-22C5" x="4057" y="0"></use><use xlink:href="#E3-MJMATHI-4D" x="4558" y="0"></use><use xlink:href="#E3-MJMAIN-22C5" x="5831" y="0"></use><use xlink:href="#E3-MJMATHI-4E" x="6331" y="0"></use><use xlink:href="#E3-MJMAIN-22C5" x="7441" y="0"></use><g transform="translate(7942,0)"><use xlink:href="#E3-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E3-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E3-MJMAIN-22C5" x="9621" y="0"></use><g transform="translate(10122,0)"><use xlink:href="#E3-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E3-MJMATHI-46" x="1170" y="-213"></use></g></g></svg></span><script type="math/tex" id="MathJax-Element-3">D_K · D_K · M · N · D_F · D_F</script></p><p>分解后的计算量为：</p><p><span class="MathJax_Preview"></span><span class="MathJax_SVG" id="MathJax-Element-4-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="42.302ex" height="2.227ex" viewBox="0 -755.9 18213.3 958.9" role="img" focusable="false" style="vertical-align: -0.472ex;"><defs><path stroke-width="0" id="E4-MJMATHI-44" d="M287 628Q287 635 230 637Q207 637 200 638T193 647Q193 655 197 667T204 682Q206 683 403 683Q570 682 590 682T630 676Q702 659 752 597T803 431Q803 275 696 151T444 3L430 1L236 0H125H72Q48 0 41 2T33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM703 469Q703 507 692 537T666 584T629 613T590 629T555 636Q553 636 541 636T512 636T479 637H436Q392 637 386 627Q384 623 313 339T242 52Q242 48 253 48T330 47Q335 47 349 47T373 46Q499 46 581 128Q617 164 640 212T683 339T703 469Z"></path><path stroke-width="0" id="E4-MJMATHI-4B" d="M285 628Q285 635 228 637Q205 637 198 638T191 647Q191 649 193 661Q199 681 203 682Q205 683 214 683H219Q260 681 355 681Q389 681 418 681T463 682T483 682Q500 682 500 674Q500 669 497 660Q496 658 496 654T495 648T493 644T490 641T486 639T479 638T470 637T456 637Q416 636 405 634T387 623L306 305Q307 305 490 449T678 597Q692 611 692 620Q692 635 667 637Q651 637 651 648Q651 650 654 662T659 677Q662 682 676 682Q680 682 711 681T791 680Q814 680 839 681T869 682Q889 682 889 672Q889 650 881 642Q878 637 862 637Q787 632 726 586Q710 576 656 534T556 455L509 418L518 396Q527 374 546 329T581 244Q656 67 661 61Q663 59 666 57Q680 47 717 46H738Q744 38 744 37T741 19Q737 6 731 0H720Q680 3 625 3Q503 3 488 0H478Q472 6 472 9T474 27Q478 40 480 43T491 46H494Q544 46 544 71Q544 75 517 141T485 216L427 354L359 301L291 248L268 155Q245 63 245 58Q245 51 253 49T303 46H334Q340 37 340 35Q340 19 333 5Q328 0 317 0Q314 0 280 1T180 2Q118 2 85 2T49 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Z"></path><path stroke-width="0" id="E4-MJMAIN-22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path><path stroke-width="0" id="E4-MJMATHI-4D" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path><path stroke-width="0" id="E4-MJMATHI-46" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path><path stroke-width="0" id="E4-MJMAIN-2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path><path stroke-width="0" id="E4-MJMATHI-4E" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xlink:href="#E4-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E4-MJMATHI-4B" x="1170" y="-213"></use><use xlink:href="#E4-MJMAIN-22C5" x="1778" y="0"></use><g transform="translate(2279,0)"><use xlink:href="#E4-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E4-MJMATHI-4B" x="1170" y="-213"></use></g><use xlink:href="#E4-MJMAIN-22C5" x="4057" y="0"></use><use xlink:href="#E4-MJMATHI-4D" x="4558" y="0"></use><use xlink:href="#E4-MJMAIN-22C5" x="5831" y="0"></use><g transform="translate(6331,0)"><use xlink:href="#E4-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E4-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E4-MJMAIN-22C5" x="8011" y="0"></use><g transform="translate(8511,0)"><use xlink:href="#E4-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E4-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E4-MJMAIN-2B" x="10191" y="0"></use><use xlink:href="#E4-MJMATHI-4D" x="11191" y="0"></use><use xlink:href="#E4-MJMAIN-22C5" x="12464" y="0"></use><use xlink:href="#E4-MJMATHI-4E" x="12965" y="0"></use><use xlink:href="#E4-MJMAIN-22C5" x="14075" y="0"></use><g transform="translate(14575,0)"><use xlink:href="#E4-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E4-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E4-MJMAIN-22C5" x="16255" y="0"></use><g transform="translate(16755,0)"><use xlink:href="#E4-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E4-MJMATHI-46" x="1170" y="-213"></use></g></g></svg></span><script type="math/tex" id="MathJax-Element-4">D_K · D_K · M · D_F · D_F + M · N · D_F · D_F</script></p><p>两者相差了 8、9 倍。</p><h3><a name='header-n859' class='md-header-anchor '></a>3.2. Network Structure and Training</h3><blockquote><p>All layers are followed by a batchnorm and ReLU nonlinearity with the exception of the final fully connected layer which has no nonlinearity and feeds into a softmax layer for classification.</p></blockquote><p>这句话的意思是说 MobileNets 中除了最后的全连阶层之外，其他层都接上了 batchnorm 和 ReLU。</p><p><img src='images/network.png' alt='' referrerPolicy='no-referrer' /></p><h3><a name='header-n867' class='md-header-anchor '></a>3.3. Width Multiplier: Thinner Models</h3><p><strong>Width Multiplier α</strong> 做的事情其实就是对输入的通道数 M 压缩成 αM。加上 width multiplier α 的 depthwise separable convolution 的计算量为：</p><p><span class="MathJax_Preview"></span><span class="MathJax_SVG" id="MathJax-Element-5-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="46.761ex" height="2.227ex" viewBox="0 -755.9 20133.3 958.9" role="img" focusable="false" style="vertical-align: -0.472ex;"><defs><path stroke-width="0" id="E5-MJMATHI-44" d="M287 628Q287 635 230 637Q207 637 200 638T193 647Q193 655 197 667T204 682Q206 683 403 683Q570 682 590 682T630 676Q702 659 752 597T803 431Q803 275 696 151T444 3L430 1L236 0H125H72Q48 0 41 2T33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM703 469Q703 507 692 537T666 584T629 613T590 629T555 636Q553 636 541 636T512 636T479 637H436Q392 637 386 627Q384 623 313 339T242 52Q242 48 253 48T330 47Q335 47 349 47T373 46Q499 46 581 128Q617 164 640 212T683 339T703 469Z"></path><path stroke-width="0" id="E5-MJMATHI-4B" d="M285 628Q285 635 228 637Q205 637 198 638T191 647Q191 649 193 661Q199 681 203 682Q205 683 214 683H219Q260 681 355 681Q389 681 418 681T463 682T483 682Q500 682 500 674Q500 669 497 660Q496 658 496 654T495 648T493 644T490 641T486 639T479 638T470 637T456 637Q416 636 405 634T387 623L306 305Q307 305 490 449T678 597Q692 611 692 620Q692 635 667 637Q651 637 651 648Q651 650 654 662T659 677Q662 682 676 682Q680 682 711 681T791 680Q814 680 839 681T869 682Q889 682 889 672Q889 650 881 642Q878 637 862 637Q787 632 726 586Q710 576 656 534T556 455L509 418L518 396Q527 374 546 329T581 244Q656 67 661 61Q663 59 666 57Q680 47 717 46H738Q744 38 744 37T741 19Q737 6 731 0H720Q680 3 625 3Q503 3 488 0H478Q472 6 472 9T474 27Q478 40 480 43T491 46H494Q544 46 544 71Q544 75 517 141T485 216L427 354L359 301L291 248L268 155Q245 63 245 58Q245 51 253 49T303 46H334Q340 37 340 35Q340 19 333 5Q328 0 317 0Q314 0 280 1T180 2Q118 2 85 2T49 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Z"></path><path stroke-width="0" id="E5-MJMAIN-22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path><path stroke-width="0" id="E5-MJMATHI-3B1" d="M34 156Q34 270 120 356T309 442Q379 442 421 402T478 304Q484 275 485 237V208Q534 282 560 374Q564 388 566 390T582 393Q603 393 603 385Q603 376 594 346T558 261T497 161L486 147L487 123Q489 67 495 47T514 26Q528 28 540 37T557 60Q559 67 562 68T577 70Q597 70 597 62Q597 56 591 43Q579 19 556 5T512 -10H505Q438 -10 414 62L411 69L400 61Q390 53 370 41T325 18T267 -2T203 -11Q124 -11 79 39T34 156ZM208 26Q257 26 306 47T379 90L403 112Q401 255 396 290Q382 405 304 405Q235 405 183 332Q156 292 139 224T121 120Q121 71 146 49T208 26Z"></path><path stroke-width="0" id="E5-MJMATHI-4D" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path><path stroke-width="0" id="E5-MJMATHI-46" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path><path stroke-width="0" id="E5-MJMAIN-2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path><path stroke-width="0" id="E5-MJMATHI-4E" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xlink:href="#E5-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E5-MJMATHI-4B" x="1170" y="-213"></use><use xlink:href="#E5-MJMAIN-22C5" x="1778" y="0"></use><g transform="translate(2279,0)"><use xlink:href="#E5-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E5-MJMATHI-4B" x="1170" y="-213"></use></g><use xlink:href="#E5-MJMAIN-22C5" x="4057" y="0"></use><use xlink:href="#E5-MJMATHI-3B1" x="4558" y="0"></use><use xlink:href="#E5-MJMATHI-4D" x="5198" y="0"></use><use xlink:href="#E5-MJMAIN-22C5" x="6471" y="0"></use><g transform="translate(6971,0)"><use xlink:href="#E5-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E5-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E5-MJMAIN-22C5" x="8651" y="0"></use><g transform="translate(9151,0)"><use xlink:href="#E5-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E5-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E5-MJMAIN-2B" x="10831" y="0"></use><use xlink:href="#E5-MJMATHI-3B1" x="11831" y="0"></use><use xlink:href="#E5-MJMATHI-4D" x="12471" y="0"></use><use xlink:href="#E5-MJMAIN-22C5" x="13744" y="0"></use><use xlink:href="#E5-MJMATHI-3B1" x="14245" y="0"></use><use xlink:href="#E5-MJMATHI-4E" x="14885" y="0"></use><use xlink:href="#E5-MJMAIN-22C5" x="15995" y="0"></use><g transform="translate(16495,0)"><use xlink:href="#E5-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E5-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E5-MJMAIN-22C5" x="18175" y="0"></use><g transform="translate(18675,0)"><use xlink:href="#E5-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E5-MJMATHI-46" x="1170" y="-213"></use></g></g></svg></span><script type="math/tex" id="MathJax-Element-5">D_K · D_K · αM · D_F · D_F + αM · αN · D_F · D_F</script></p><h3><a name='header-n872' class='md-header-anchor '></a>3.4. Resolution Multiplier: Reduced Representation</h3><p><strong>Resolution Multiplier ρ</strong> 做的事情是输入输出的 feature map 的尺寸进行压缩。同时加上 width multiplier α 和 resolution multiplier ρ 的 depthwise separable convolution 的计算量为：</p><p><span class="MathJax_Preview"></span><span class="MathJax_SVG" id="MathJax-Element-6-Frame" tabindex="-1" style="font-size: 100%; display: inline-block;"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="51.564ex" height="2.461ex" viewBox="0 -755.9 22201.3 1059.4" role="img" focusable="false" style="vertical-align: -0.705ex;"><defs><path stroke-width="0" id="E6-MJMATHI-44" d="M287 628Q287 635 230 637Q207 637 200 638T193 647Q193 655 197 667T204 682Q206 683 403 683Q570 682 590 682T630 676Q702 659 752 597T803 431Q803 275 696 151T444 3L430 1L236 0H125H72Q48 0 41 2T33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM703 469Q703 507 692 537T666 584T629 613T590 629T555 636Q553 636 541 636T512 636T479 637H436Q392 637 386 627Q384 623 313 339T242 52Q242 48 253 48T330 47Q335 47 349 47T373 46Q499 46 581 128Q617 164 640 212T683 339T703 469Z"></path><path stroke-width="0" id="E6-MJMATHI-4B" d="M285 628Q285 635 228 637Q205 637 198 638T191 647Q191 649 193 661Q199 681 203 682Q205 683 214 683H219Q260 681 355 681Q389 681 418 681T463 682T483 682Q500 682 500 674Q500 669 497 660Q496 658 496 654T495 648T493 644T490 641T486 639T479 638T470 637T456 637Q416 636 405 634T387 623L306 305Q307 305 490 449T678 597Q692 611 692 620Q692 635 667 637Q651 637 651 648Q651 650 654 662T659 677Q662 682 676 682Q680 682 711 681T791 680Q814 680 839 681T869 682Q889 682 889 672Q889 650 881 642Q878 637 862 637Q787 632 726 586Q710 576 656 534T556 455L509 418L518 396Q527 374 546 329T581 244Q656 67 661 61Q663 59 666 57Q680 47 717 46H738Q744 38 744 37T741 19Q737 6 731 0H720Q680 3 625 3Q503 3 488 0H478Q472 6 472 9T474 27Q478 40 480 43T491 46H494Q544 46 544 71Q544 75 517 141T485 216L427 354L359 301L291 248L268 155Q245 63 245 58Q245 51 253 49T303 46H334Q340 37 340 35Q340 19 333 5Q328 0 317 0Q314 0 280 1T180 2Q118 2 85 2T49 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Z"></path><path stroke-width="0" id="E6-MJMAIN-22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path><path stroke-width="0" id="E6-MJMATHI-3B1" d="M34 156Q34 270 120 356T309 442Q379 442 421 402T478 304Q484 275 485 237V208Q534 282 560 374Q564 388 566 390T582 393Q603 393 603 385Q603 376 594 346T558 261T497 161L486 147L487 123Q489 67 495 47T514 26Q528 28 540 37T557 60Q559 67 562 68T577 70Q597 70 597 62Q597 56 591 43Q579 19 556 5T512 -10H505Q438 -10 414 62L411 69L400 61Q390 53 370 41T325 18T267 -2T203 -11Q124 -11 79 39T34 156ZM208 26Q257 26 306 47T379 90L403 112Q401 255 396 290Q382 405 304 405Q235 405 183 332Q156 292 139 224T121 120Q121 71 146 49T208 26Z"></path><path stroke-width="0" id="E6-MJMATHI-4D" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path><path stroke-width="0" id="E6-MJMATHI-3C1" d="M58 -216Q25 -216 23 -186Q23 -176 73 26T127 234Q143 289 182 341Q252 427 341 441Q343 441 349 441T359 442Q432 442 471 394T510 276Q510 219 486 165T425 74T345 13T266 -10H255H248Q197 -10 165 35L160 41L133 -71Q108 -168 104 -181T92 -202Q76 -216 58 -216ZM424 322Q424 359 407 382T357 405Q322 405 287 376T231 300Q217 269 193 170L176 102Q193 26 260 26Q298 26 334 62Q367 92 389 158T418 266T424 322Z"></path><path stroke-width="0" id="E6-MJMATHI-46" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path><path stroke-width="0" id="E6-MJMAIN-2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path><path stroke-width="0" id="E6-MJMATHI-4E" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><use xlink:href="#E6-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E6-MJMATHI-4B" x="1170" y="-213"></use><use xlink:href="#E6-MJMAIN-22C5" x="1778" y="0"></use><g transform="translate(2279,0)"><use xlink:href="#E6-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E6-MJMATHI-4B" x="1170" y="-213"></use></g><use xlink:href="#E6-MJMAIN-22C5" x="4057" y="0"></use><use xlink:href="#E6-MJMATHI-3B1" x="4558" y="0"></use><use xlink:href="#E6-MJMATHI-4D" x="5198" y="0"></use><use xlink:href="#E6-MJMAIN-22C5" x="6471" y="0"></use><use xlink:href="#E6-MJMATHI-3C1" x="6971" y="0"></use><g transform="translate(7488,0)"><use xlink:href="#E6-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E6-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E6-MJMAIN-22C5" x="9168" y="0"></use><use xlink:href="#E6-MJMATHI-3C1" x="9668" y="0"></use><g transform="translate(10185,0)"><use xlink:href="#E6-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E6-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E6-MJMAIN-2B" x="11865" y="0"></use><use xlink:href="#E6-MJMATHI-3B1" x="12865" y="0"></use><use xlink:href="#E6-MJMATHI-4D" x="13505" y="0"></use><use xlink:href="#E6-MJMAIN-22C5" x="14778" y="0"></use><use xlink:href="#E6-MJMATHI-3B1" x="15279" y="0"></use><use xlink:href="#E6-MJMATHI-4E" x="15919" y="0"></use><use xlink:href="#E6-MJMAIN-22C5" x="17029" y="0"></use><use xlink:href="#E6-MJMATHI-3C1" x="17529" y="0"></use><g transform="translate(18046,0)"><use xlink:href="#E6-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E6-MJMATHI-46" x="1170" y="-213"></use></g><use xlink:href="#E6-MJMAIN-22C5" x="19726" y="0"></use><use xlink:href="#E6-MJMATHI-3C1" x="20226" y="0"></use><g transform="translate(20743,0)"><use xlink:href="#E6-MJMATHI-44" x="0" y="0"></use><use transform="scale(0.707)" xlink:href="#E6-MJMATHI-46" x="1170" y="-213"></use></g></g></svg></span><script type="math/tex" id="MathJax-Element-6">D_K · D_K · αM · ρD_F · ρD_F + αM · αN · ρD_F · ρD_F</script></p><h2><a name='header-n877' class='md-header-anchor '></a>4. Resources</h2><ul><li><a href='assets/MobileNets.pdf'>MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications</a></li><li><a href='https://github.com/chuanqi305/MobileNet-SSD'>chuanqi305/MobileNet-SSD（非官方）</a></li></ul></div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-# [painterdrown Blog](https://painterdrown.github.io)
+# painterdrown Blog
 
 > 🤴🏻 painterdrown<br/>
 > ⛩ SYSU Software Engineering<br/>

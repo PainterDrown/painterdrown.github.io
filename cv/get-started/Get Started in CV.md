@@ -1,4 +1,6 @@
-# 计算机视觉之 Get Started
+[painterdrown Blog](https://painterdrown.github.io) - [painterdrown CV](https://painterdrown.github.io/cv)
+
+# Get Started in CV
 
 > ⏰ 2018-03-27 00:18:00<br/>
 > 👨🏻‍💻 painterdrown

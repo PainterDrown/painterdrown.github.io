@@ -1,4 +1,6 @@
-# 我和 SSD 的亲密接触
+[painterdrown Blog](https://painterdrown.github.io) - [painterdrown CV](https://painterdrown.github.io/cv)
+
+# SSD - Notes & Practice
 
 > ⏰ 2018-05-21 08:22:22<br/>
 > 👨🏻‍💻 painterdrown

@@ -1,7 +1,11 @@
-# 系统分析与设计 Assignment 3（UML 活动图、用例图的学习笔记）
+[painterdrown Blog](https://painterdrown.github.io) - [painterdrown SAAD](https://painterdrown.github.io/saad)
+
+# SAAD Assignment 3
 
 > ⏰ 2018-04-10 20:52:47<br/>
 > 👨🏻‍💻 painterdrown
+
+这次作业是关于 UML 活动图、用例图的学习笔记。
 
 ## UML 活动图
 
