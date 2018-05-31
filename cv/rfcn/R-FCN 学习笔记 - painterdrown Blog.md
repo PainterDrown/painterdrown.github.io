@@ -84,6 +84,6 @@ R-FCN 使用的 0.0005 的 decay 和 0.9 的 momentum。默认地，训练只做
 + [Understanding and Implementing Architectures of ResNet and ResNeXt for state-of-the-art Image Classification: From Microsoft to Facebook [Part 1]](https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624)
 + [Understanding and Implementing Architectures of ResNet and ResNeXt for state-of-the-art Image Classification: From Microsoft to Facebook [Part 2]](https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cc5d0adf648e)
 
-> 最后，胆小的我发现论文里面这组图很有鬼片既视感，一起感受一下：
+~~最后，胆小的我发现论文里面这组图很有鬼片既视感，一起感受一下：~~
 
 ![](images/goast.png)
