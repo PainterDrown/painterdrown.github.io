@@ -34,13 +34,44 @@
 
 ResNets 为了达到这个 dilemma，它在其检测流水线的卷积中插入了 RoI 池化层（这个操作是 region-specific 的）。这样一来就打破了 translation invariance，在后面的 RoI 池化层在多个不同 region 上就不会具有 translation-invariant。总而言之，ResNets 这样的设计牺牲了训练和测试的效率，因为涉及了大量的 region-wise layers（暂时不理解这种层是什么东西）。
 
-![](images/architecture.png)
+![](images/key_idea.png)
 
 回到正题，这篇论文提出了一个用于目标检测的框架——R-FCN。通过一系列的 position-sensitive score maps，将 translation variance 融入 FCN。每一个 score map 会对相对位置信息进行编码。在 FCN 的顶层，有一层 position-sensitive RoI pooling layer 对这些编码后的信息进行解译。R-FCN 是端到端的架构，所有的卷积层都共享一整张图片的计算。
 
 R-FCN 用 ResNet-101 作为网络骨干，在 VOC 上的 mAP 达到了 82%！测试时，每张图片耗时 170ms，可以说非常优秀了！
 
 ## 2. Our Approach
+
+首先看下 R-FCN 的整体架构：
+
+![](images/architecture.png)
+
+R-FCN 也是通过 RPN 来获取 region proposals，后面对于每一个 RoI，都输出 k^2^(C+1)-channel 个分类结果。这里的 k^2^ 是有讲究的：比如说 k = 3 时，k^2^ = 9 对于前面提到的 9 个 encoded 的相对位置 { top-left, top-center,
+top-right, ..., bottom-right }。
+
+R-FCN 的最后一层是 position-sensitive 的 RoI 池化层（有选择性的），其聚合了前面卷积层的输出并且对于每个 RoI 都生成分类得分。参考 Introduction 中的那张图片，中，每一个 RoI 从前面的 k^2^ 个 score maps bank 中拿出自己每个位置的得分，然后进行投票，判断这个 RoI 是否属于某个分类。
+
+![](images/visualization1.png)
+
+![](images/visualization2.png)
+
+### 2.1. Backbone Architecture
+
+ResNet-101（ImageNet 预训练得到） 去掉 average pooling layer 和最后的全连接层，留下卷积层来计算 feature maps。ResNet-101 最后一个卷积层是 2048 维的，为了降低维度，后面接上一个 1024 维的随机初始化的卷积层。然后再接上 k^2^(C + 1)-channel 的卷积层来生成 score maps。
+
+### 2.2. Position-sensitive Score maps & Position-sensitive RoI Pooling
+
+每个 RoI 区域被分成 k×k 个网格，分别对应相对（相对于这个 RoI）的位置信息。每一个 RoI 从同一个 score maps 里面提出出各自的分类得分，每个 RoI 得到 k^2^ 个得分之后，取平均来判断这个 RoI 为分类的概率。
+
+![](images/roi.png)
+
+对于 bounding box regression 也是采用类似的做法：先生成 4k^2^ 的 regression maps（跟前面生成 k^2^(C + 1)-channel 的卷积层是 sibling 关系），再对每个 RoI 进行池化，投票。
+
+### 2.3. Training
+
+跟 Fast R-CNN 类似，损失函数同时考虑分类和回归两个 task。首先假设每张图片有 N 个 proposals，前向计算其 loss，对结果进行排序，取前 B 个 RoI。然后做反向传播的时候只做这 B 个。由于每个 RoI 的计算时间可以忽略不计，因此前向的计算基本跟 N 没有关系。
+
+R-FCN 使用的 0.0005 的 decay 和 0.9 的 momentum。默认地，训练只做一个图像尺寸，每张图片 resize 使其较短的边都是 600px。When doing fine-tune, using a learning rate of 0.001 for 20k mini-batches and 0.0001 for 10k mini-batches on VOC.
 
 ## 3. Resources
 
@@ -52,3 +83,7 @@ R-FCN 用 ResNet-101 作为网络骨干，在 VOC 上的 mAP 达到了 82%！测
 
 + [Understanding and Implementing Architectures of ResNet and ResNeXt for state-of-the-art Image Classification: From Microsoft to Facebook [Part 1]](https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cf51669e1624)
 + [Understanding and Implementing Architectures of ResNet and ResNeXt for state-of-the-art Image Classification: From Microsoft to Facebook [Part 2]](https://medium.com/@14prakash/understanding-and-implementing-architectures-of-resnet-and-resnext-for-state-of-the-art-image-cc5d0adf648e)
+
+> 最后，胆小的我发现论文里面这组图很有鬼片既视感，一起感受一下：
+
+![](images/goast.png)
