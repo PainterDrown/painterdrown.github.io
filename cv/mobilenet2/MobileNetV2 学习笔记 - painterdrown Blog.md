@@ -73,5 +73,5 @@
 
 ## 4. Resources
 
-+ [MobileNetV2: Inverted Residuals and Linear Bottlenecks](assets/MobileNetV2.pdf)
++ [MobileNetV2: Inverted Residuals and Linear Bottlenecks](../papers/MobileNetV2.pdf)
 + [chuanqi305/MobileNetv2-SSDLite（非官方）](https://github.com/chuanqi305/MobileNetv2-SSDLite)

@@ -75,6 +75,6 @@ R-CNN 使用的是 Krizhevsky 的 CNN 模型，提取出 4096 维的特征向量
 
 ## 5. Resources
 
-+ [Rich feature hierarchies for accurate object detection and semantic segmentation Tech report (v5)](assets/R-CNN.pdf)
++ [Rich feature hierarchies for accurate object detection and semantic segmentation Tech report (v5)](../papers/R-CNN.pdf)
 + [GitHub(MATLAB)](https://github.com/rbgirshick/rcnn)
 

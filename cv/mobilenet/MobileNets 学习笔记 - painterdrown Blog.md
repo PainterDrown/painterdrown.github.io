@@ -74,5 +74,5 @@ $D_K · D_K · αM · ρD_F · ρD_F + αM · αN · ρD_F · ρD_F$
 
 ## 4. Resources
 
-+ [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications](assets/MobileNets.pdf)
++ [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications](../papers/MobileNets.pdf)
 + [chuanqi305/MobileNet-SSD（非官方）](https://github.com/chuanqi305/MobileNet-SSD)

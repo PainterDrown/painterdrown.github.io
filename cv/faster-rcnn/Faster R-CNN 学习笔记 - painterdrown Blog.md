@@ -17,7 +17,7 @@
 
 ## 1. Introduction
 
-现在很多 region proposal algorithms 都是用的 [Selective Search](assets/Selective_Search.pdf)，效果上比较不理想。而且是跑在 CPU 上的，如果只是单单将其重构为 GPU 版本，也没有办法跟接下来的检测网络分享计算结果。
+现在很多 region proposal algorithms 都是用的 [Selective Search](../papers/Selective_Search.pdf)，效果上比较不理想。而且是跑在 CPU 上的，如果只是单单将其重构为 GPU 版本，也没有办法跟接下来的检测网络分享计算结果。
 
 Faster R-CNN 使用深度卷积网络来计算 region proposals，可以说是最大的一个亮点。作者观察到，Fast R-CNN 检测网络用到的 convolutional feature maps，也可以用于生成 region proposals。在 RPN 的 convolutional features 之上，作者加了一层卷积来同时做边界回归和目标置信度计算，这使得 RPN 成为全卷积网络 (FCN)，可以端到端地生成 region proposals。
 
@@ -104,6 +104,6 @@ RPN 的训练是端到端的，通过**反向传播**和**随机梯度下降**�
 
 ## 3. Resources
 
-+ [Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks](assets/Faster_R-CNN.pdf)
++ [Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks](../papers/Faster_R-CNN.pdf)
 + [GitHub (MATLAB)](https://github.com/shaoqingren/faster_rcnn)
 + [GitHub (python)](https://github.com/rbgirshick/py-faster-rcnn)
