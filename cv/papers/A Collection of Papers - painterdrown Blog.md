@@ -21,7 +21,12 @@
 	+ [[Towards High PerformanceVideo Object Detection]](Towards_High_Performance_Video_Object_Detection.pdf)
 	+ [[Towards High PerformanceVideo Object Detection for Mobiles]](Towards_High_Performance_Video_Object_Detection_for_Mobiles.pdf)
 + **Others**
-	+ [[Selective Search]](Selective_Search.pdf) Selective Search for Object Recognition
-	+ [[AlexNet]](AlexNet.pdf) ImageNet Classification with Deep ConvolutionalNeural Networks
-	+ [[VGG]](VGG.pdf) VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION
+	+ [[Selective Search]](Selective_Search.pdf) Selective Search for Object Recognition (2012)
+	+ [[AlexNet]](AlexNet.pdf) ImageNet Classification with Deep ConvolutionalNeural Networks (2012)
+	+ [[VGG]](VGG.pdf) VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION (2014)
 	+ [[FCN]](FCN.pdf) Fully convolutional networks for semantic segmentation
+	+ [[FlowNet]](FlowNet.pdf) FlowNet: Learning Optical Flow with Convolutional Networks
+	+ [[Quantized Neural Networks]](Quantized_Neural_Networks.pdf) Quantized Neural Networks: Training Neural Networks with Low Precision Weights and Activations
+	+ [[FSO]](FSO.pdf) Feature Space Optimization for Semantic Video Segmentation (2016)
+	+ [[STFCN]](STFCN.pdf) STFCN: Spatio-Temporal FCN for Semantic Video Segmentation (2016)
+	+ [[Clockwork Convnets]](Clockwork_Convnets.pdf) Clockwork Convnets for Video Semantic Segmentation (2016)
