@@ -25,7 +25,7 @@ Faster R-CNN 使用深度卷积网络来计算 region proposals，可以说是�
 
 上面介绍了三种选择 egion proposals 的策略，Faster R-CNN 采用的是第三种，称为“锚点”。
 
-训练的 Faster R-CNN 的策略：固定某个 proposals，交替地进行 region proposal 的微调以及 object detection 的微调。这种训练方法能够快速收敛，并且产生一个共享的带有 convolutional features 的统一网络。
+训练的 Faster R-CNN 的策略：固定某个 proposals，交替地进行 region proposal 的调优以及 object detection 的调优。这种训练方法能够快速收敛，并且产生一个共享的带有 convolutional features 的统一网络。
 
 ## 2. Faster R-CNN
 
@@ -82,7 +82,7 @@ RPN 的训练是端到端的，通过**反向传播**和**随机梯度下降**�
 
 一开始，RPN 和 Fast R-CNN 是独立进行训练的，会以不同的方式各自修改他们的卷积层。要使他们能够共享卷积，有三个关键：
 
-1. **Alternating training（交替训练）**。首先先将 RPN 训练出来，得出 proposals 后去训练 Fast R-CNN，然后再用 Fast R-CNN 微调出来的网络去初始化 RPN，不断迭代这个过程。
+1. **Alternating training（交替训练）**。首先先将 RPN 训练出来，得出 proposals 后去训练 Fast R-CNN，然后再用 Fast R-CNN 调优出来的网络去初始化 RPN，不断迭代这个过程。
 
 2. **Approximate joint training（近似联合训练）**。在做前向的时候，将 RPN 得出来的 proposals 认为是 fixed, pre-computed 的，然后传给 Fast R-CNN。反向传播的时候，（两个网络的）共享层会同时受到 RPN loss 和 Fast R-CNN loss 的影响。由于忽略了 proposal boxes’ coordinates 的微分，所以说是近似的。
 

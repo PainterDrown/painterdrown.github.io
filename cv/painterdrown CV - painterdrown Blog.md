@@ -16,9 +16,9 @@
 	+ [MobileNets 学习笔记](https://painterdrown.github.io/cv/mobilenet) (2018-05)
 	+ [MobileNetV2 学习笔记](https://painterdrown.github.io/cv/mobilenet2) (2018-05)
 + **Video Object Detection**
-	+ [Deep Feature Flow for Video Recognition 学习笔记](https://painterdrown.github.io/cv/deep-feature-flow-for-video-recognition) (2018-06)
-	+ [Flow-Guided Feature Aggregation for Video Object Detection 学习笔记](https://painterdrown.github.io/cv/flow-guided-feature-aggregation-for-video-object-detection) (2018-06)
-	+ [Towards High Performance Video Object Detection 学习笔记](https://painterdrown.github.io/cv/towards-high-performance-video-object-detection) (2018-06)
-	+ [Towards High Performance Video Object Detection for Mobiles 学习笔记](https://painterdrown.github.io/cv/towards-high-performance-video-object-detection-for-mobiles) (2018-06)
+	+ [Deep Feature Flow for Video Recognition 学习笔记](https://painterdrown.github.io/cv/dff) (2018-06)
+	+ [Flow-Guided Feature Aggregation for Video Object Detection 学习笔记](https://painterdrown.github.io/cv/fgfa) (2018-06)
+	+ [Towards High Performance Video Object Detection 学习笔记](https://painterdrown.github.io/cv/thp) (2018-06)
+	+ [Towards High Performance Video Object Detection for Mobiles 学习笔记](https://painterdrown.github.io/cv/thp-mobile) (2018-06)
 
 ![](index/images/lena.jpg)

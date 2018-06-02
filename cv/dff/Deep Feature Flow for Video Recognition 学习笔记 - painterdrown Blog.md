@@ -100,5 +100,5 @@ Flow function 本来是用来获取低级的图像信息的，不适用于高级
 
 ## 6. Resources
 
-+ [Deep Feature Flow for Video Recognition](../papers/Deep Feature Flow for Video Recognition.pdf)
++ [Deep Feature Flow for Video Recognition](../papers/DFF.pdf)
 + [GitHub (python)](https://github.com/msracver/Deep-Feature-Flow)
