@@ -31,13 +31,13 @@ FFA 聚集了同一运动路径 (motion path) 上的特征信息。
 
 FGFA 涉及了四个网络：
 
-+  **feature extraction network**。用来提取 reference frame（可以理解为关键帧）的特征。
++  **feature extraction network**。用来提取 reference frame（可以理解为当前帧）的特征。
 
-+ **optical flow network**。用来估计邻近帧之间的运动信息。然后基于关键帧，根据这个运动信息，对邻近帧做 warping（变形）。
++ **optical flow network**。用来估计邻近帧之间的运动信息。然后基于 reference frame，根据这个运动信息，对邻近帧做 warping（变形）。
 
-+ **adaptive weighting network**。用来在关键帧的 feature maps 上面聚集变形后的邻近帧的 feature maps。
++ **adaptive weighting network**。用来在 reference frame 的 feature maps 上面聚集变形后的邻近帧的 feature maps。
 
-+ **detection network**。聚集后的 feature maps 会输入到该网络，来检测关键帧上的目标。
++ **detection network**。聚集后的 feature maps 会输入到该网络，来检测 reference frame 上的目标。
 
 另外，FGFA 是 feature level 的，若是与一些 box level 的方法结合互补，可以提升效果。
 
@@ -80,7 +80,7 @@ Inference 的伪代码如下，可以描述为：
 
 ### 3.3. Network Architecture
 
-+ **Flow network**: FlowNet [8] (“simple” version)
++ **Flow network**: FlowNet (“simple” version)
 + **Feature network**: ResNet (-50 and -101) and Inception-Resnet
 + **Embedding network**: 3 layers (randomly initialized):
     + 1×1×512 convolution
