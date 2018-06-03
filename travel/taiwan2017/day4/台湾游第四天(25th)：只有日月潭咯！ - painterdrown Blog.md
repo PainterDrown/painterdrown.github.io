@@ -1,6 +1,6 @@
 [painterdrown Blog](https://painterdrown.github.io) - [painterdrown Travel](https://painterdrown.github.io/travel)
 
-# 台湾游第四天(25th)：只有日月潭咯！
+# 台湾游第四天(25th)：只有日月潭！
 
 > ⏰ 2017-08-25<br/>
 > 👨🏻‍💻 painterdrown
