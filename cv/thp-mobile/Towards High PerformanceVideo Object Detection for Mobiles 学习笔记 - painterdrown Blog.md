@@ -79,7 +79,7 @@ Recursive aggregation 能够更好地结合邻近帧的信息，但是很难被�
 
 ### 3.3. Lightweight Key-frame Object Detector
 
-+ **Feature Network**: MobileNet 去掉最后一层的平均池化以及其他的全连接层，保留卷积层
++ **Feature Network**: MobileNets 去掉最后一层的平均池化以及其他的全连接层，保留卷积层
 + **Detection Network**: RPN + Light-Head R-CNN，RPN 中间的特征图缩小一半的通道。最后是 RoI 的 warped feature 输入到两个 sibling（分类和回归）全连接层，得到最终的结果。
 
 ### 3.4. End-to-end Training
