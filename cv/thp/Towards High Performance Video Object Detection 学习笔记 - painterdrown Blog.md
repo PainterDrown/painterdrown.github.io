@@ -81,7 +81,7 @@
 
 这个式子得到的是从关键帧 k 到邻近非关键帧 i 的特征传播，不是直接的 i 的特征。所以，要得到 i 比较好的特征，就必须保证上式的这个特征传播质量。作者提出了一个新的概念来做这个事情：feature temporal consistency Q~k→i~。这是在 N~flow~ 的输出层加一个 sibling branch 来做预测，得到这个值。
 
-![](images/propagation.png)
+![](images/consistency.png)
 
 算出 Q~k→i~ 后，通过一个阈值 τ 来判断其是否与 i 帧相容。如果低于阈值，说明 F~k→i~ （表示从 k 传播到 i 得到的特征）的效果不好，因此需要另外对 i 帧“打个补丁”—— updating with real feature F~i~(p)，也就是用卷积重新计算 i 的特征图进行更新：
 
