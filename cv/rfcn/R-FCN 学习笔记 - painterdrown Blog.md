@@ -26,7 +26,7 @@
 1. 全卷积层计算可共享，但是独立于 RoIs（也就是说 RoI 层还要单独计算）
 2. RoI-wise subnetwork that does not share computation（我的理解是 RoI 现在不独立，但是也没有分享计算）
 
-很多传统的分类网络 ([AlexNet](../papers/AlexNet.pdf), [VGG](../papers/VGG.pdf)) 的架构都是：卷积子网络 (ending with a spatial pooling layer) 后面加上几个全连阶层。
+很多传统的分类网络 ([AlexNet](../papers/AlexNet.pdf), [VGG](../papers/VGG.pdf)) 的架构都是：卷积子网络 (ending with a spatial pooling layer) 后面加上几个全连接层。
 
 然而，state-of-the-art 的图像分类网络 ([ResNets](../papers/ResNets.pdf), [GoogLeNet](../papers/)) 都是用的 FCN（全卷积网络），计算的时候会将 RoI 考虑进来。但是这种架构在实际使用的时候存在一个 "inferior detection accuracy（较差检测精度）" 的问题。ResNets 尝试在 Faster R-CNN 中的 RoI 池化层前后都插入 (unnaturally) 卷积层。这提升了精度，但由于 RoI 池化层的计算还不是共享的，所以会花费大量的计算时间。
 

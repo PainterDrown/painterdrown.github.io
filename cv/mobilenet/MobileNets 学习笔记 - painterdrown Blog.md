@@ -56,7 +56,7 @@ $D_K · D_K · M · D_F · D_F + M · N · D_F · D_F$
 
 > All layers are followed by a batchnorm and ReLU nonlinearity with the exception of the final fully connected layer which has no nonlinearity and feeds into a softmax layer for classification.
 
-这句话的意思是说 MobileNets 中除了最后的全连阶层之外，其他层都接上了 batchnorm 和 ReLU。
+这句话的意思是说 MobileNets 中除了最后的全连接层之外，其他层都接上了 batchnorm 和 ReLU。
 
 ![](images/network.png)
 

@@ -33,7 +33,7 @@ Faster R-CNN 使用深度卷积网络来计算 region proposals，可以说是�
 
 ### 2.1. Region Proposal Networks
 
-由于要和 Fast R-CNN 共享计算，作者假设这两部分网络都共享一系列相同的卷积层。RPN 最后一个 shared convolutional layer 会输出可分享的 convolutional feature map，然后在它上面 "slide a small network" 来生成 region proposals。这个滑动的小网络层的输入是 n×n×d（作者取 n = 3，而 d 取决于 convolutional feature map 的通道数），然后这个输入会被映射为低维特征。这些低维的特征将被输送给两个兄弟全连阶层：
+由于要和 Fast R-CNN 共享计算，作者假设这两部分网络都共享一系列相同的卷积层。RPN 最后一个 shared convolutional layer 会输出可分享的 convolutional feature map，然后在它上面 "slide a small network" 来生成 region proposals。这个滑动的小网络层的输入是 n×n×d（作者取 n = 3，而 d 取决于 convolutional feature map 的通道数），然后这个输入会被映射为低维特征。这些低维的特征将被输送给两个兄弟全连接层：
 
 + box-regression layer (reg)
 + box-classification layer (cls)

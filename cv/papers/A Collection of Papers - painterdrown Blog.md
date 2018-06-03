@@ -7,10 +7,10 @@
 + **Image Object Detection**
   + [[R-CNN]](R-CNN.pdf) Rich feature hierarchies for accurate object detection and semantic segmentationTech report (v5)
   + [[Fast R-CNN]](Fast_R-CNN.pdf) Fast R-CNN
-  + [[Faster R-CNN]](Faster_R-CNN.pdf) Faster R-CNN: Towards Real-Time ObjectDetection with Region Proposal Networks
+  + [[Faster R-CNN]](Faster_R-CNN.pdf) Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks
   + [[ResNets]](ResNets.pdf) Deep Residual Learning for Image Recognition
   + [[GoogLeNet]](GoogLeNet.pdf) Going Deeper with Convolutions
-  + [[R-FCN]](R-FCN.pdf) R-FCN: Object Detection viaRegion-based Fully Convolutional Networks
+  + [[R-FCN]](R-FCN.pdf) R-FCN: Object Detection via Region-based Fully Convolutional Networks
   + [[SSD]](SSD.pdf) SSD: Single Shot MultiBox Detector
   + [[YOLO]](YOLO.pdf) You Only Look Once: Unified, Real-Time Object Detection
   + [[YOLO9000]](YOLO9000.pdf) YOLO9000: Better, Faster, Stronger
@@ -31,3 +31,4 @@
   + [[STFCN]](STFCN.pdf) STFCN: Spatio-Temporal FCN for Semantic Video Segmentation (2016)
   + [[Clockwork Convnets]](Clockwork_Convnets.pdf) Clockwork Convnets for Video Semantic Segmentation (2016)
   + [DCNets](DCNets.pdf) Deformable Convolutional Networks (2017)
+  + [Light-Head R-CNN](Light-Head_R-CNN.pdf) Light-Head R-CNN: In Defense of Two-Stage Object Detector (2017)
