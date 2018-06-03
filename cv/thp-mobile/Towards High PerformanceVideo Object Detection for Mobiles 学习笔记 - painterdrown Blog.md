@@ -37,7 +37,7 @@
 这两个准则在桌面 GPU 下的表现很好。手机上的准则要做一些调整：
 
 + 只对关键帧做特征提取和聚集，对非关键帧做轻量的特征传播。
-+ 用 FlowNet 在手机上做 flow estimation 比较奢侈，FLOPS (floating point operations per second) 是 MobileNet 的 11.8 倍（在相同的输入分辨率下）。因此急需一个更轻量的 N~flow~。
++ 用 FlowNet 在手机上做 flow estimation 比较奢侈，FLOPS (floating point operations per second) 是 MobileNets 的 11.8 倍（在相同的输入分辨率下）。因此急需一个更轻量的 N~flow~。
 + 应该在对齐（根据流信息）的特征图上做聚集，否则，大目标的位移会给聚集带来误差。要想办法做长区间的特征聚集（就要克服内存不足的问题）。
 + 用于计算关键帧特征的卷积网络要尽量小。
 
