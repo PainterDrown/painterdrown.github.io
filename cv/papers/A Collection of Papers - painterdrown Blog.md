@@ -32,3 +32,5 @@
   + [[Clockwork Convnets]](Clockwork_Convnets.pdf) Clockwork Convnets for Video Semantic Segmentation (2016)
   + [DCNets](DCNets.pdf) Deformable Convolutional Networks (2017)
   + [Light-Head R-CNN](Light-Head_R-CNN.pdf) Light-Head R-CNN: In Defense of Two-Stage Object Detector (2017)
+  + [DenseNet](DenseNet.pdf) Densely Connected Convolutional Networks (2018)
+
