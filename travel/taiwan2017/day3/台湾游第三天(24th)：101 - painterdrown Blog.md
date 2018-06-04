@@ -41,6 +41,10 @@
 
 ![](images/hezhao.png)
 
+![](images/we.png)
+
 今天大概就这样啦，回到房间开了几局黑，明天估计要坐5个小时的大巴去日月潭，很舍不得这两天的台北！赶紧洗完睡觉啦😪886
 
 ![](images/tamen2.png)
+
+![](images/group.png)
