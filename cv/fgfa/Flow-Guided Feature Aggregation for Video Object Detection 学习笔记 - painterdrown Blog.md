@@ -83,12 +83,32 @@ Inference 的伪代码如下，可以描述为：
 + **Flow network**: FlowNet (“simple” version)
 + **Feature network**: ResNet (-50 and -101) and Inception-Resnet
 + **Embedding network**: 3 layers (randomly initialized):
-    + 1×1×512 convolution
-    + 3×3×512 convolution
-    + 1×1×2048 convolution
+  + 1×1×512 convolution
+  + 3×3×512 convolution
+  + 1×1×2048 convolution
 + **Detection network**: R-FCN
 
-## 4. Resources
+## 4. Experiments
+
+参考以下两篇论文，训练的时候要用到 ImageNet DET 和 VID 两个数据集。
+
+> [T-cnn: Tubelets with convolutional neural networks for object detection from videos.](../papers/T-CNN.pdf)<br/>
+> [Multi-Class Multi-Object Tracking using Changing Point Detection](../papers/Multi-Class_Multi-Object_Tracking_using_Changing Point_Detection.pdf)
+
+训练分两个阶段：
+  1. 使用 DET 数据集来训练 N~feat 和 N~det~（使用的标注数据是 VID 中的 30 个分类），相关细节：
+    + 使用了 SGD (one image at each mini-batch)
+    + 使用 4 个 GPU 来跑 120K 次迭代 (each GPU holding one mini-batch)
+    + The learning rates are 10^−3^ and 10^−4^ in the first 80K and in the last 40K iterations
+  2. 使用 VID 数据集来训练整个 FGFA 模型，相关细节：
+    + 使用 4 个 GPU 来跑 60K 次迭代
+    + The learning rates are 10^−3^ and 10^−4^ in the first 40K and in the last 20K iterations
+
+在训练和测试的时候，图像会进行缩放：
+  + 在 N~feat~ 中，缩放成短边为 600px
+  + 在 N~flow~ 中，缩放成短边为 300px
+
+## 5. Resources
 
 + [Flow-Guided Feature Aggregation for Video Object Detection](../papers/FGFA.pdf)
 + [GitHub (python)](https://github.com/msracver/Flow-Guided-Feature-Aggregation)
