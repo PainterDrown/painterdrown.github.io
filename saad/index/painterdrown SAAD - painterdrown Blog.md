@@ -3,6 +3,8 @@
 # painterdrown SAAD
 
 > https://dtosaad.github.io/documents
+>
+> 🎥 [Demo](https://www.bilibili.com/video/av26106597)
 
 + [SAAD Assignment 1](https://painterdrown.github.io/saad/assignment-1)
 + [SAAD Assignment 2](https://painterdrown.github.io/saad/assignment-2)
