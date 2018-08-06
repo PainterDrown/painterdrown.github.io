@@ -87,7 +87,7 @@
 
 ![](images/updating.png)
 
-值得注意到是，特征更新到过程是可以逐层进行的（用第 n-1 层来更新第 n 层）。
+值得注意到是，特征更新的过程是可以逐层进行的（用第 n-1 层来更新第 n 层）。
 
 ### 3.3. Temporally-adaptive Key Frame Scheduling
 
