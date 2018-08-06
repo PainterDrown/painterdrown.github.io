@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAAD Assignment 5</title>
+<link rel="shortcut icon" href="../../assets/img/icon.png" type="image/x-icon"/>
+<link rel="icon" href="../../assets/img/icon.png" type="image/x-icon"/>
+<link rel="stylesheet" href="../../assets/css/github-markdown.css">
+<link rel="stylesheet" href="../../assets/css/index.css">
+</head>
+<body class="markdown-body">
+<p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/saad">painterdrown SAAD</a></p>
+<h1>SAAD Assignment 5</h1>
+<blockquote>
+<p>⏰ 2018-04-27 21:22:59<br/>
+👨🏻‍💻 painterdrown</p>
+</blockquote>
+<h2>按用例构建领域模型</h2>
+<p><img src="images/lingyu.png" alt=""></p>
+<h2>数据库建模（E-R 模型）</h2>
+<p><img src="images/db.png" alt=""></p>
+<pre><code class="language-SQL">create table consumer 
+(
+   name                 char(20)                       not null,
+   email                char(50)                       not null,
+   constraint PK_CONSUMER primary key clustered (name)
+);
+
+create table hotel 
+(
+   name                 char(50)                       not null,
+   star                 decimal                        null,
+   &quot;index&quot;              char(20)                       not null,
+   code                 char(20)                       null,
+   address              dec(50)                        null,
+   constraint PK_HOTEL primary key clustered (&quot;index&quot;)
+);
+
+create table location 
+(
+   code                 char(20)                       not null,
+   name                 char(50)                       not null,
+   constraint PK_LOCATION primary key clustered (code, name)
+);
+
+create table request 
+(
+   &quot;hotel name&quot;         char(50)                       not null,
+   city                 char(20)                       null,
+   &quot;room type&quot;          char(10)                       not null,
+   &quot;check in date&quot;      datetime                       not null,
+   &quot;check out date&quot;     datetime                       not null,
+   hotel_index          char(20)                       null,
+   con_name             char(20)                       null,
+   special              char(100)                      null,
+   &quot;request index&quot;      char(20)                       not null,
+   constraint PK_REQUEST primary key clustered (&quot;check in date&quot;, &quot;check out date&quot;, &quot;request index&quot;)
+);
+
+create table room 
+(
+   &quot;room id&quot;            char(10)                       not null,
+   &quot;hotel index&quot;        char(20)                       null,
+   type                 char(20)                       not null,
+   &quot;availble num&quot;       decimal                        not null,
+   constraint PK_ROOM primary key clustered (&quot;room id&quot;)
+);
+
+create table &quot;room description&quot; 
+(
+   &quot;room id&quot;            char(10)                       null,
+   type                 char(20)                       not null,
+   &quot;list price&quot;         double                         not null
+);
+
+alter table hotel
+   add constraint FK_HOTEL_REFERENCE_LOCATION foreign key (code, name)
+      references location (code, name)
+      on update restrict
+      on delete restrict;
+
+alter table request
+   add constraint FK_REQUEST_REFERENCE_HOTEL foreign key (hotel_index)
+      references hotel (&quot;index&quot;)
+      on update restrict
+      on delete restrict;
+
+alter table request
+   add constraint FK_REQUEST_REFERENCE_CONSUMER foreign key (con_name)
+      references consumer (name)
+      on update restrict
+      on delete restrict;
+
+alter table room
+   add constraint FK_ROOM_REFERENCE_HOTEL foreign key (&quot;hotel index&quot;)
+      references hotel (&quot;index&quot;)
+      on update restrict
+      on delete restrict;
+
+alter table &quot;room description&quot;
+   add constraint &quot;FK_ROOM DES_REFERENCE_ROOM&quot; foreign key (&quot;room id&quot;)
+      references room (&quot;room id&quot;)
+      on update restrict
+      on delete restrict;
+</code></pre>
+</body>
+</html>

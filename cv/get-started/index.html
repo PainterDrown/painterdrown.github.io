@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Started</title>
+<link rel="shortcut icon" href="../../assets/img/icon.png" type="image/x-icon"/>
+<link rel="icon" href="../../assets/img/icon.png" type="image/x-icon"/>
+<link rel="stylesheet" href="../../assets/css/github-markdown.css">
+<link rel="stylesheet" href="../../assets/css/index.css">
+</head>
+<body class="markdown-body">
+<p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
+<h1>Get Started</h1>
+<blockquote>
+<p>⏰ 2018-03-27 00:18:00<br/>
+👨🏻‍💻 painterdrown</p>
+</blockquote>
+<p>[TOC]</p>
+<h2>1. 前言</h2>
+<p>今晚实验室老师开会，说打算开始带我和另外一位同学做 CV 以及神经网络。为了更系统地学习和记忆，接下来我打以博客的形式记录下学习过程及心得等等。</p>
+<h2>2. 部署环境</h2>
+<p>师兄提到玩计算机视觉必定要碰 OpenCV，所以这里讲一下我的安装过程。</p>
+<h3>2.1 brew 安装</h3>
+<p>由于我用的是 macOS，比较方便的做法是：Xcode + OpenCV 的环境。</p>
+<ol>
+<li>
+<p>使用 brew 安装：<code>brew install opencv</code></p>
+</li>
+<li>
+<p>安装完之后，可以看到以下目录及文件：</p>
+<ul>
+<li>/usr/local/Cellar/opencv</li>
+<li>/usr/local/include</li>
+<li>/usr/local/lib</li>
+</ul>
+</li>
+<li>
+<p>Xcode 新建命令行程序项目，在工程文件下进行以下设置：</p>
+<ul>
+<li>Build Phases -&gt; Link Binary With Libraries 添加 /usr/local/Cellar/opencv/&lt;版本&gt;/lib 中的所有 .dylib 文件</li>
+</ul>
+<p><img src="images/setting-1.png" alt="Build Phases"></p>
+<ul>
+<li>Build Settings -&gt; Search Paths 添加 /usr/local/include 和 /usr/local/lib</li>
+</ul>
+<p><img src="images/setting-2.png" alt="Build Settings"></p>
+</li>
+<li>
+<p>配置完毕，在 cpp 文件直接：<code>#include &quot;opencv2/opencv.hpp&quot;</code>，测试代码：</p>
+</li>
+</ol>
+<pre><code class="language-C++">#include &quot;opencv2/opencv.hpp&quot;
+using namespace cv;
+
+int main(int argc, const char * argv[]) {
+    Mat image;
+    image = imread(&quot;test.jpeg&quot;);  // 这里换成图片的绝对路径
+    namedWindow(&quot;Hello OpenCV!&quot;, WINDOW_AUTOSIZE);
+    imshow(&quot;Hello OpenCV!&quot;, image);
+    waitKey(0);
+    return 0;
+}
+</code></pre>
+<p>如果需要部署 python 环境，就通过 <code>ln -s</code> 来把 <a href="http://cs2.so">cs2.so</a> 文件（在 opencv 安装目录找到）软连接到 python 的 packages 目录下，这里不赘述。</p>
+<h3>2.2 源码编译安装</h3>
+<p>最近在看《OpenCV 3 计算机视觉 Python 语言实现》，里面需要搭 OpenCV + Python 的环境，此外要需要引入外部模块 contrib。为了满足这些条件，这次是用源码编译安装的。</p>
+<ol>
+<li>获取源码</li>
+</ol>
+<pre><code class="language-sh">git clone https://github.com/opencv/opencv.git
+git clone https://github.com/opencv/opencv_contrib.git
+cd opencv
+mkdir build
+cd build
+</code></pre>
+<ol start="2">
+<li>编译、安装</li>
+</ol>
+<pre><code class="language-sh">cmake -D CMAKE_BUILD_TYPE=RELEASE \
+      -D CMAKE_INSTALL_PREFIX=/usr/local \
+      -D PYTHON2_PACKAGES_PATH=/usr/local/lib/python2.7/site-packages \
+      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ..
+make -j4
+sudo make install
+</code></pre>
+<h2>3. Resources</h2>
+<ul>
+<li><a href="http://open.163.com/special/opencourse/machinelearning.html">吴恩达 (Andrew Ng) 关于机器学习的公开课</a></li>
+<li><a href="http://www.ee.cuhk.edu.hk/~xgwang/">王晓刚（香港中文大学）教授关于深度学习的课程</a></li>
+<li><a href="http://study.163.com/course/courseMain.htm?courseId=1004697005">李飞飞关于 CNN 的计算机视觉公开课</a></li>
+</ul>
+</body>
+</html>
