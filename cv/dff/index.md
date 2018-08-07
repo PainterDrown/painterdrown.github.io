@@ -5,7 +5,7 @@
 > ⏰ 2018-06-01 00:00:00<br/>
 > 👨🏻‍💻 painterdrown
 
-[TOC]
+@[toc]
 
 Oh yeah, 终于开始看视频目标检测啦！BTW，🎈 *Happy Children's Day* 🎈
 

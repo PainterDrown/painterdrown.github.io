@@ -5,7 +5,7 @@
 > ⏰ 2018-05-28 19:16:22<br/>
 > 👨🏻‍💻 painterdrown
 
-[TOC]
+@[toc]
 
 ## 0. Abstract
 

@@ -11,13 +11,37 @@
 </head>
 <body class="markdown-body">
 <p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
-<h1>我和 SSD 的亲密接触</h1>
+<h1 id="我和-ssd-的亲密接触"><a class="markdownIt-Anchor" href="#我和-ssd-的亲密接触">#</a> 我和 SSD 的亲密接触</h1>
 <blockquote>
 <p>⏰ 2018-05-21 08:22:22<br/>
 👨🏻‍💻 painterdrown</p>
 </blockquote>
-<p>[TOC]</p>
-<h2>1. 装 caffe</h2>
+<p><ul class="markdownIt-TOC">
+<li><a href="#%E6%88%91%E5%92%8C-ssd-%E7%9A%84%E4%BA%B2%E5%AF%86%E6%8E%A5%E8%A7%A6">我和 SSD 的亲密接触</a>
+<ul>
+<li><a href="#1-%E8%A3%85-caffe">1. 装 caffe</a></li>
+<li><a href="#2-%E8%AE%AD%E7%BB%83-%E8%AF%84%E4%BC%B0">2. 训练 &amp; 评估</a>
+<ul>
+<li><a href="#21-train-evaluate%E9%A1%BA%E4%BE%BF">2.1 Train &amp; Evaluate(顺便)</a></li>
+<li><a href="#22-evaluate">2.2 Evaluate</a></li>
+<li><a href="#23-test-using-a-webcam">2.3 Test Using a Webcam</a></li>
+<li><a href="#24-test">2.4 Test</a></li>
+<li><a href="#25-train-on-other-dataset">2.5 Train on Other Dataset</a></li>
+</ul>
+</li>
+<li><a href="#3-btw">3. BTW</a>
+<ul>
+<li><a href="#31-linux-%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81">3.1 Linux 进程状态</a></li>
+<li><a href="#32-tmux-%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C">3.2 tmux 常用操作</a></li>
+<li><a href="#33-%E5%9C%A8-macos-terminal-%E9%80%9A%E8%BF%87-ssh-%E6%98%BE%E7%A4%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2">3.3 在 macOS Terminal 通过 ssh 显示服务器的图形化界面</a></li>
+</ul>
+</li>
+<li><a href="#4-resources">4. Resources</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h2 id="1-装-caffe"><a class="markdownIt-Anchor" href="#1-装-caffe">#</a> 1. 装 caffe</h2>
 <p>实验室的服务器（Ubuntu 16.04）已经装好了 CUDA, cuDNN, OpenCV 的环境，所以现在只需要编译一下 Caffe 就可以跑。</p>
 <blockquote>
 <p>官方安装教程：<a href="https://github.com/weiliu89/caffe/tree/ssd#installation">https://github.com/weiliu89/caffe/tree/ssd#installation</a></p>
@@ -32,8 +56,8 @@ LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_serial_hl
 </code></pre>
 <p>我这边 <code>make py</code> 的结果：</p>
 <p><img src="images/make_py.png" alt="make py"></p>
-<h2>2. 训练 &amp; 评估</h2>
-<h3>2.1 Train &amp; Evaluate(顺便)</h3>
+<h2 id="2-训练-评估"><a class="markdownIt-Anchor" href="#2-训练-评估">#</a> 2. 训练 &amp; 评估</h2>
+<h3 id="21-train-evaluate顺便"><a class="markdownIt-Anchor" href="#21-train-evaluate顺便">#</a> 2.1 Train &amp; Evaluate(顺便)</h3>
 <pre><code class="language-sh"># time: 08:48
 python examples/ssd/ssd_pascal.py
 </code></pre>
@@ -58,7 +82,7 @@ ps &lt;pid&gt;
 <p><img src="images/models.png" alt="训练模型"></p>
 <p>还有这次训练的其它 job file, log file, python script 在 <code>$CAFFE_ROOT/jobs/VGGNet/VOC0712/SSD_300x300/</code>:</p>
 <p><img src="images/stuff.png" alt="训练 stuff"></p>
-<h3>2.2 Evaluate</h3>
+<h3 id="22-evaluate"><a class="markdownIt-Anchor" href="#22-evaluate">#</a> 2.2 Evaluate</h3>
 <blockquote>
 <p>It should reach 77.* mAP at 120k iterations.</p>
 </blockquote>
@@ -68,15 +92,15 @@ ps &lt;pid&gt;
 <p>输出如下：</p>
 <p><img src="images/mAP.png" alt="mAP"></p>
 <p>可以看到是有 <strong>76.99</strong> 的 mAP，没有 77 有点小失望。</p>
-<h3>2.3 Test Using a Webcam</h3>
+<h3 id="23-test-using-a-webcam"><a class="markdownIt-Anchor" href="#23-test-using-a-webcam">#</a> 2.3 Test Using a Webcam</h3>
 <p>这一步就算了，我这里没有网络摄像头。</p>
-<h3>2.4 Test</h3>
+<h3 id="24-test"><a class="markdownIt-Anchor" href="#24-test">#</a> 2.4 Test</h3>
 <blockquote>
 <p>Check out examples/ssd_detect.ipynb or examples/ssd/ssd_detect.cpp on how to detect objects using a SSD model. Check out examples/ssd/plot_detections.py on how to plot detection results output by ssd_detect.cpp.</p>
 </blockquote>
 <p>这里是在说有 Jupyter 文档说明如何用 SSD 来做目标检测以及如何圈出检测结果。我把 Jupyter 转成了 HTML：<a href="assets/ssd_detect.html">examples/ssd_detect.ipynb</a>。</p>
 <p>附上 <a href="assets/ssd_detect.cpp">examples/ssd/ssd_detect.cpp</a> 和 <a href="assets/plot_detections.py">examples/ssd/plot_detections.py</a>。</p>
-<h3>2.5 Train on Other Dataset</h3>
+<h3 id="25-train-on-other-dataset"><a class="markdownIt-Anchor" href="#25-train-on-other-dataset">#</a> 2.5 Train on Other Dataset</h3>
 <blockquote>
 <p>To train on other dataset, please refer to data/OTHERDATASET for more details. We currently add support for COCO and ILSVRC2016. We recommend using examples/ssd.ipynb to check whether the new dataset is prepared correctly.</p>
 </blockquote>
@@ -86,8 +110,8 @@ ps &lt;pid&gt;
 <li>引入训练好到模型 <code>models/VGGNet/VOC0712/SSD_300x300/VGG_VOC0712_SSD_300x300_iter_120000.caffemodel</code></li>
 <li>加载测试图片，喂到模型里面，得到 classsification score 和 bounding box</li>
 </ol>
-<h2>3. BTW</h2>
-<h3>3.1 Linux 进程状态</h3>
+<h2 id="3-btw"><a class="markdownIt-Anchor" href="#3-btw">#</a> 3. BTW</h2>
+<h3 id="31-linux-进程状态"><a class="markdownIt-Anchor" href="#31-linux-进程状态">#</a> 3.1 Linux 进程状态</h3>
 <ul>
 <li><code>D</code> 不可中断 Uninterruptible sleep(usually IO)</li>
 <li><code>R</code> 正在运行，或在队列中的进程</li>
@@ -106,7 +130,7 @@ ps &lt;pid&gt;
 <li><code>+</code> 位于后台的进程组</li>
 <li><code>l</code> 多线程，克隆线程</li>
 </ul>
-<h3>3.2 tmux 常用操作</h3>
+<h3 id="32-tmux-常用操作"><a class="markdownIt-Anchor" href="#32-tmux-常用操作">#</a> 3.2 tmux 常用操作</h3>
 <ul>
 <li><code>tmux new -s &lt;name&gt;</code> 新建会话并取个名字。</li>
 <li><code>tmux ls</code> 查看所有会话。</li>
@@ -115,7 +139,7 @@ ps &lt;pid&gt;
 <li><code>Ctrl + B + D</code> 退出某个会话（仍在后台）。</li>
 <li><code>Ctrl + B + S</code> 切换到另外的会话。</li>
 </ul>
-<h3>3.3 在 macOS Terminal 通过 ssh 显示服务器的图形化界面</h3>
+<h3 id="33-在-macos-terminal-通过-ssh-显示服务器的图形化界面"><a class="markdownIt-Anchor" href="#33-在-macos-terminal-通过-ssh-显示服务器的图形化界面">#</a> 3.3 在 macOS Terminal 通过 ssh 显示服务器的图形化界面</h3>
 <blockquote>
 <p><a href="https://uisapp2.iu.edu/confluence-prd/pages/viewpage.action?pageId=280461906">https://uisapp2.iu.edu/confluence-prd/pages/viewpage.action?pageId=280461906</a></p>
 </blockquote>
@@ -124,7 +148,7 @@ ps &lt;pid&gt;
 <li>ssh 连接的时候带上 <code>-X</code> 参数：<code>ssh user@host -X</code></li>
 <li>之后，在 ssh 里面进行图形化相关的操作，就会在 mac 本地显示出来</li>
 </ol>
-<h2>4. Resources</h2>
+<h2 id="4-resources"><a class="markdownIt-Anchor" href="#4-resources">#</a> 4. Resources</h2>
 <ul>
 <li><a href="../papers/SSD.pdf">SSD: Single Shot MultiBox Detector</a></li>
 <li>官方源码：<a href="https://github.com/weiliu89/caffe/tree/ssd">https://github.com/weiliu89/caffe/tree/ssd</a></li>

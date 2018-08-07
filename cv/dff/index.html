@@ -11,20 +11,47 @@
 </head>
 <body class="markdown-body">
 <p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
-<h1>Deep Feature Flow for Video Recognition 学习笔记</h1>
+<h1 id="deep-feature-flow-for-video-recognition-学习笔记"><a class="markdownIt-Anchor" href="#deep-feature-flow-for-video-recognition-学习笔记">#</a> Deep Feature Flow for Video Recognition 学习笔记</h1>
 <blockquote>
 <p>⏰ 2018-06-01 00:00:00<br/>
 👨🏻‍💻 painterdrown</p>
 </blockquote>
-<p>[TOC]</p>
+<p><ul class="markdownIt-TOC">
+<li><a href="#deep-feature-flow-for-video-recognition-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0">Deep Feature Flow for Video Recognition 学习笔记</a>
+<ul>
+<li><a href="#0-abstract">0. Abstract</a></li>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#2-related-work">2. Related Work</a></li>
+<li><a href="#3-deep-feature-flow">3. Deep Feature Flow</a>
+<ul>
+<li><a href="#31-inference">3.1. Inference</a></li>
+<li><a href="#32-training">3.2. Training</a></li>
+<li><a href="#33-inference-complexity-analysis">3.3. Inference Complexity Analysis</a></li>
+<li><a href="#34-key-frame-scheduling">3.4. Key Frame Scheduling</a></li>
+</ul>
+</li>
+<li><a href="#4-network-architectures">4. Network Architectures</a>
+<ul>
+<li><a href="#41-flow-network">4.1. Flow Network</a></li>
+<li><a href="#42-feature-network">4.2. Feature Network</a></li>
+<li><a href="#43-semantic-segmentation">4.3. Semantic Segmentation</a></li>
+<li><a href="#44-object-detection">4.4. Object Detection</a></li>
+</ul>
+</li>
+<li><a href="#5-future-work">5. Future Work</a></li>
+<li><a href="#6-resources">6. Resources</a></li>
+</ul>
+</li>
+</ul>
+</p>
 <p>Oh yeah, 终于开始看视频目标检测啦！BTW，🎈 <em>Happy Children’s Day</em> 🎈</p>
-<h2>0. Abstract</h2>
+<h2 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract">#</a> 0. Abstract</h2>
 <p>目前的图像目标检测已经发展地比较成熟了，不过如果单帧地应用在视频上则显得太慢了。作者提出了 deep feature flow（深度特征流，一个又快又准的视频目标检测框架。它只在 sparse key frames 上跑卷积，通过 deep feature maps 在同一个流场（我理解为一段连续的且比较相似的帧）的其它帧之间进行传播。训练是端到端的，速度和精度（精度有吗？感觉还不如 Faster R-CNN）上都有明显的提升。</p>
-<h2>1. Introduction</h2>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction">#</a> 1. Introduction</h2>
 <p>从图像识别到视频识别，要处理好视频帧之间的连续性以及冗余的信息。现在大多数的 CNN 架构里面，卷积计算占计算资源消耗的主体。计算出来的 convolutional feature maps 保留了图像的低级内容到中高级语义内容的对应关系。这样一来，就可以轻易地在相邻帧之间传播特征信息（by spatial warping 空间变形），这与光流类似。</p>
 <p>一般来说，flow estimation &amp; feature propagation 比简单地去计算多帧的 convolutional features 要快得多。而且如果能用网络做 flow estimation 的话，整个视频目标检测架构就是端到端的。</p>
 <p><img src="images/motivation.png" alt=""></p>
-<h2>2. Related Work</h2>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work">#</a> 2. Related Work</h2>
 <ul>
 <li>
 <p><strong>Image Recognition</strong>。已经有很多成熟的网络了，可以看我前面图像目标识别的学习笔记，这里不赘述。</p>
@@ -45,37 +72,37 @@
 <p><strong><a href="../papers/Clockwork_Convnets.pdf">Clockwork Convnets</a></strong>。它做的事情跟 Deep Feature Flow 很类似：都是使网络中的某些层在视频中的某些帧上失效以及特征复用。但是由于没有考虑到不同帧之间的对应信息，Clockwork Convnets 在加速的时候会损失较多的精度。</p>
 </li>
 </ul>
-<h2>3. Deep Feature Flow</h2>
+<h2 id="3-deep-feature-flow"><a class="markdownIt-Anchor" href="#3-deep-feature-flow">#</a> 3. Deep Feature Flow</h2>
 <p><img src="images/architecture.png" alt=""></p>
-<h3>3.1. Inference</h3>
-<p>总网络（feed-forward convolutional neutral）可以分解为连续的两部分：<strong>N~feat~（特征网络）</strong> 和 <strong>N~task~（任务网络）</strong>。前者（全卷积）会输出许多 feature maps，后者会在这些 feature maps 上面做检测任务。</p>
+<h3 id="31-inference"><a class="markdownIt-Anchor" href="#31-inference">#</a> 3.1. Inference</h3>
+<p>总网络（feed-forward convolutional neutral）可以分解为连续的两部分：<strong>N<sub>feat</sub>（特征网络）</strong> 和 <strong>N<sub>task</sub>（任务网络）</strong>。前者（全卷积）会输出许多 feature maps，后者会在这些 feature maps 上面做检测任务。</p>
 <p>通过流估计算法得到 flow field（我理解为关键帧及其相邻帧之间的流信息）。通过双线性插值来做 feature warping。为了减少流估计算法带来的误差，通过 “scale field” 来做更好的特征估计。</p>
 <p>伪代码如下：</p>
 <p><img src="images/code.png" alt=""></p>
-<h3>3.2. Training</h3>
+<h3 id="32-training"><a class="markdownIt-Anchor" href="#32-training">#</a> 3.2. Training</h3>
 <p>Flow function 本来是用来获取低级的图像信息的，不适用于高级 feature maps 的提取。作者用一个 CNN 去估算 flow fiel 和 scale field。因此，就可以进行端到端的训练。</p>
-<p>训练的方法是 <strong>SGD（随机梯度下降）</strong>。在每一个 mini-batch 里面，随机地到连续的 10 帧里面随机抽取两帧 I~k~（关键帧） 和 I~i~。前面说到的 <strong>N~feat~</strong> 跑在 I~k~ 上，然后 <strong>flow network N~flow~</strong> 跑在 I~k~ 和 I~i~ 上来算出 flow field 和 scale field。N~flow~ 的速度要比 N~feat~ 快很多，前者是在 <em>Flying Chairs dataset</em> 上预训练的。在 N~flow~ 最后输出层加上一个 sibling：scale function。</p>
-<p>值得一提的是，视频检测的训练集标注的代价很高（特别是对于采用 per-frame 做法的网络）。但是 DFF 则不同，它只要求 I~i~ 帧的数据集有标准就足够了。</p>
-<h3>3.3. Inference Complexity Analysis</h3>
+<p>训练的方法是 <strong>SGD（随机梯度下降）</strong>。在每一个 mini-batch 里面，随机地到连续的 10 帧里面随机抽取两帧 I<sub>k</sub>（关键帧） 和 I<sub>i</sub>。前面说到的 <strong>N<sub>feat</sub></strong> 跑在 I<sub>k</sub> 上，然后 <strong>flow network N<sub>flow</sub></strong> 跑在 I<sub>k</sub> 和 I<sub>i</sub> 上来算出 flow field 和 scale field。N<sub>flow</sub> 的速度要比 N<sub>feat</sub> 快很多，前者是在 <em>Flying Chairs dataset</em> 上预训练的。在 N<sub>flow</sub> 最后输出层加上一个 sibling：scale function。</p>
+<p>值得一提的是，视频检测的训练集标注的代价很高（特别是对于采用 per-frame 做法的网络）。但是 DFF 则不同，它只要求 I<sub>i</sub> 帧的数据集有标准就足够了。</p>
+<h3 id="33-inference-complexity-analysis"><a class="markdownIt-Anchor" href="#33-inference-complexity-analysis">#</a> 3.3. Inference Complexity Analysis</h3>
 <p>这一段主要是在分析 inference 的复杂度，inference 可以理解为用训练出来的模型去 test。分析的过程参考原论文吧。</p>
-<h3>3.4. Key Frame Scheduling</h3>
+<h3 id="34-key-frame-scheduling"><a class="markdownIt-Anchor" href="#34-key-frame-scheduling">#</a> 3.4. Key Frame Scheduling</h3>
 <p>这篇论文用的方法是固定长度地选取一个关键帧。但是作者提到，最理想的做法是将发生剧烈变化的帧作为关键帧。</p>
-<h2>4. Network Architectures</h2>
-<h3>4.1. Flow Network</h3>
+<h2 id="4-network-architectures"><a class="markdownIt-Anchor" href="#4-network-architectures">#</a> 4. Network Architectures</h2>
+<h3 id="41-flow-network"><a class="markdownIt-Anchor" href="#41-flow-network">#</a> 4.1. Flow Network</h3>
 <p>这里用的是 <a href="../papers/FlowNet.pdf">FlowNet</a> 的简单版本：将每一层卷积核的数目减少一半，这样整个网络的复杂度就变为原来的四分之一。再者，加入 <em>FlowNet Inception</em> 并且将其复杂度降低为 FlowNet 的八分之一。</p>
-<h3>4.2. Feature Network</h3>
+<h3 id="42-feature-network"><a class="markdownIt-Anchor" href="#42-feature-network">#</a> 4.2. Feature Network</h3>
 <p>这里用的是在 ImageNet 上预训练的 <strong>ResNet-50</strong> 和 <strong>ResNet-101</strong>（取消了最后的 1000-way 分类层）。为了生成更稠密的 feature maps，将其步长从 32 减小到 16。后面：</p>
 <ul>
 <li>如果做语义切割，则用 <strong>DeepLab</strong>；</li>
 <li>如果做目标检测，则用 <strong>R-FCN</strong>。</li>
 </ul>
-<h3>4.3. Semantic Segmentation</h3>
+<h3 id="43-semantic-segmentation"><a class="markdownIt-Anchor" href="#43-semantic-segmentation">#</a> 4.3. Semantic Segmentation</h3>
 <p>暂时对这里没兴趣。</p>
-<h3>4.4. Object Detection</h3>
+<h3 id="44-object-detection"><a class="markdownIt-Anchor" href="#44-object-detection">#</a> 4.4. Object Detection</h3>
 <blockquote>
 <p>参考 <a href="https://painterdrown.github.io/cv/rfcn">R-FCN 学习笔记</a>，这里不做赘述。</p>
 </blockquote>
-<h2>5. Future Work</h2>
+<h2 id="5-future-work"><a class="markdownIt-Anchor" href="#5-future-work">#</a> 5. Future Work</h2>
 <p>由于要研究视频目标检测这一块，所以有必要了解一下这个话题。</p>
 <blockquote>
 <ol>
@@ -89,7 +116,7 @@
 </ol>
 </blockquote>
 <p>关键帧的选择会较大地影响后面的检测效果。作者前面提到，这篇论文是定长地选取关键帧。然而最佳的做法是选取变化最大的帧作为关键帧，目前来说这可能会消耗过多的计算资源，希望在将来能在将这个 task 放在网络中来做。</p>
-<h2>6. Resources</h2>
+<h2 id="6-resources"><a class="markdownIt-Anchor" href="#6-resources">#</a> 6. Resources</h2>
 <ul>
 <li><a href="../papers/DFF.pdf">Deep Feature Flow for Video Recognition</a></li>
 <li><a href="https://github.com/msracver/Deep-Feature-Flow">GitHub (python)</a></li>

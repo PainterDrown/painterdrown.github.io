@@ -5,7 +5,7 @@
 > ⏰ 2018-06-02 09:40:36<br/>
 > 👨🏻‍💻 painterdrown
 
-[TOC]
+@[toc]
 
 ## 0. Abstract
 
@@ -93,7 +93,7 @@ Inference 的伪代码如下，可以描述为：
 参考以下两篇论文，训练的时候要用到 ImageNet DET 和 VID 两个数据集。
 
 > [T-cnn: Tubelets with convolutional neural networks for object detection from videos.](../papers/T-CNN.pdf)<br/>
-> [Multi-Class Multi-Object Tracking using Changing Point Detection](../papers/Multi-Class_Multi-Object_Tracking_using_Changing Point_Detection.pdf)
+> [Multi-Class Multi-Object Tracking using Changing Point Detection](../papers/Multi-Class_Multi-Object_Tracking_using_Changing_Point_Detection.pdf)
 
 训练分两个阶段：
   1. 使用 DET 数据集来训练 N~feat 和 N~det~（使用的标注数据是 VID 中的 30 个分类），相关细节：

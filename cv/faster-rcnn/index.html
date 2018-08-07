@@ -11,32 +11,54 @@
 </head>
 <body class="markdown-body">
 <p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
-<h1>Faster R-CNN 学习笔记</h1>
+<h1 id="faster-r-cnn-学习笔记"><a class="markdownIt-Anchor" href="#faster-r-cnn-学习笔记">#</a> Faster R-CNN 学习笔记</h1>
 <blockquote>
 <p>⏰ 2018-05-30 15:50:27<br/>
 👨🏻‍💻 painterdrown</p>
 </blockquote>
-<p>[TOC]</p>
+<p><ul class="markdownIt-TOC">
+<li><a href="#faster-r-cnn-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0">Faster R-CNN 学习笔记</a>
+<ul>
+<li><a href="#0-abstract">0. Abstract</a></li>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#2-faster-r-cnn">2. Faster R-CNN</a>
+<ul>
+<li><a href="#21-region-proposal-networks">2.1. Region Proposal Networks</a>
+<ul>
+<li><a href="#211-anchors">2.1.1 Anchors</a></li>
+<li><a href="#212-loss-function">2.1.2 Loss Function</a></li>
+<li><a href="#213-training-rpns">2.1.3 Training RPNs</a></li>
+</ul>
+</li>
+<li><a href="#22-sharing-features-for-rpn-and-fast-r-cnn">2.2. Sharing Features for RPN and Fast R-CNN</a></li>
+<li><a href="#23-implementation-details">2.3. Implementation Details</a></li>
+</ul>
+</li>
+<li><a href="#3-resources">3. Resources</a></li>
+</ul>
+</li>
+</ul>
+</p>
 <p>最近要准看视频目标检测里面的 R-FCN，听小伙伴说涉及了很多 Faster R-CNN 的内容，之前看 Faster R-CNN 的时候赶时间没做笔记，现在补回来。</p>
-<h2>0. Abstract</h2>
+<h2 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract">#</a> 0. Abstract</h2>
 <p>目前最前沿的目标检测神经网络模型，都是依赖于 region proposal algorithms（区域建议算法）来假定图像中目标的位置。在检测方面，Fast R-CNN 在速度上已经做得挺不错了，现在主要的瓶颈在于 region proposal 的计算上。就目标检测来说，之前的做法都不是端到端的，因为要先计算出 region proposal，再把它扔到网络中去进行检测。</p>
 <p>因此，这篇论文介绍了 Region Proposal Network (RPN) ，这个网络将用于计算 region proposal，而且可以与后面的 detection network 共享 convolutional features。也就是说，我们现在可以把这两部分工作给结合起来：RPN 先算出图片中目标的位置以及对应的置信度，再将这部分信息传递给 Fast R-CNN 网络进行检测。所以我们可以这里理解：<code>Faster R-CNN = RPN + Fast R-CNN</code>。Faster R-CNN 通过 “attention” 将两者合并为一个单一的端到端的目标检测网络。</p>
-<h2>1. Introduction</h2>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction">#</a> 1. Introduction</h2>
 <p>现在很多 region proposal algorithms 都是用的 <a href="../papers/Selective_Search.pdf">Selective Search</a>，效果上比较不理想。而且是跑在 CPU 上的，如果只是单单将其重构为 GPU 版本，也没有办法跟接下来的检测网络分享计算结果。</p>
 <p>Faster R-CNN 使用深度卷积网络来计算 region proposals，可以说是最大的一个亮点。作者观察到，Fast R-CNN 检测网络用到的 convolutional feature maps，也可以用于生成 region proposals。在 RPN 的 convolutional features 之上，作者加了一层卷积来同时做边界回归和目标置信度计算，这使得 RPN 成为全卷积网络 (FCN)，可以端到端地生成 region proposals。</p>
 <p><img src="images/addressing.png" alt=""></p>
 <p>上面介绍了三种选择 egion proposals 的策略，Faster R-CNN 采用的是第三种，称为“锚点”。</p>
 <p>训练的 Faster R-CNN 的策略：固定某个 proposals，交替地进行 region proposal 的调优以及 object detection 的调优。这种训练方法能够快速收敛，并且产生一个共享的带有 convolutional features 的统一网络。</p>
-<h2>2. Faster R-CNN</h2>
+<h2 id="2-faster-r-cnn"><a class="markdownIt-Anchor" href="#2-faster-r-cnn">#</a> 2. Faster R-CNN</h2>
 <p><img src="images/architecture.png" alt=""></p>
-<h3>2.1. Region Proposal Networks</h3>
+<h3 id="21-region-proposal-networks"><a class="markdownIt-Anchor" href="#21-region-proposal-networks">#</a> 2.1. Region Proposal Networks</h3>
 <p>由于要和 Fast R-CNN 共享计算，作者假设这两部分网络都共享一系列相同的卷积层。RPN 最后一个 shared convolutional layer 会输出可分享的 convolutional feature map，然后在它上面 “slide a small network” 来生成 region proposals。这个滑动的小网络层的输入是 n×n×d（作者取 n = 3，而 d 取决于 convolutional feature map 的通道数），然后这个输入会被映射为低维特征。这些低维的特征将被输送给两个兄弟全连接层：</p>
 <ul>
 <li>box-regression layer (reg)</li>
 <li>box-classification layer (cls)</li>
 </ul>
 <p><img src="images/RPN.png" alt=""></p>
-<h4>2.1.1 Anchors</h4>
+<h4 id="211-anchors"><a class="markdownIt-Anchor" href="#211-anchors">#</a> 2.1.1 Anchors</h4>
 <p>对于每一个 sliding-window，我们都会选择几个 region proposals（最多 k 个）。因此 reg 层输出的参数最多为 4k，cls 输出的参数最多为 2k（有目标的概率和无目标的概率，其实看成只有 1k 个参数也没毛病，因为两者加起来为 1）。这 k 组 proposals 是由一个 anchor（锚点）通过不同的参数 (scale &amp; aspect ratio) 来确定的。其中，</p>
 <ul>
 <li><strong>scale</strong> 是 proposals 的尺寸（应该可以理解为面积），也就是 width×height</li>
@@ -47,7 +69,7 @@
 <li><strong>Translation-Invariant Anchors</strong> 。图像的转换对于锚点及其 proposals 计算函数来说，是具有不变形的（这一点我暂无深入的理解）。</li>
 <li><strong>Multi-Scale Anchors as Regression References</strong>。意思是 Faster R-CNN 的锚点是基于 “a pyramid of anchors”，这种选 proposals 的策略比较高效，因为全程只用计算输入图像一个 scale 下的 convolutional features 就好。</li>
 </ul>
-<h4>2.1.2 Loss Function</h4>
+<h4 id="212-loss-function"><a class="markdownIt-Anchor" href="#212-loss-function">#</a> 2.1.2 Loss Function</h4>
 <p>在训练 RPN 的时候，将满足下面两个条件其中之一的样本标记为正：</p>
 <ol>
 <li>anchors with the highest Intersection-over-Union (<strong>IoU</strong>) overlap with a <strong>ground-truth box</strong></li>
@@ -57,7 +79,7 @@
 <p>这里沿用了 Fast R-CNN 的损失函数：</p>
 <p><img src="images/loss_function.png" alt=""></p>
 <p>这个损失函数同时考虑了 reg 和 cls 两个任务。</p>
-<h4>2.1.3 Training RPNs</h4>
+<h4 id="213-training-rpns"><a class="markdownIt-Anchor" href="#213-training-rpns">#</a> 2.1.3 Training RPNs</h4>
 <p>RPN 的训练是端到端的，通过<strong>反向传播</strong>和<strong>随机梯度下降</strong>。</p>
 <ul>
 <li>梯度下降的时候，一个 mini-batch 中的所有样本取自同一张图片</li>
@@ -67,7 +89,7 @@
 <li>前 60k mini-batches 的学习率为 0.001，后 20k mini-batches 的学习率为 0.0001</li>
 <li>0.9 momentum, 0.0005 weight decay</li>
 </ul>
-<h3>2.2. Sharing Features for RPN and Fast R-CNN</h3>
+<h3 id="22-sharing-features-for-rpn-and-fast-r-cnn"><a class="markdownIt-Anchor" href="#22-sharing-features-for-rpn-and-fast-r-cnn">#</a> 2.2. Sharing Features for RPN and Fast R-CNN</h3>
 <p>一开始，RPN 和 Fast R-CNN 是独立进行训练的，会以不同的方式各自修改他们的卷积层。要使他们能够共享卷积，有三个关键：</p>
 <ol>
 <li>
@@ -95,9 +117,9 @@
 <p>We fine-tune the unique layers of Fast R-CNN, keeping the shared convolutional layers fixed.</p>
 </li>
 </ol>
-<h3>2.3. Implementation Details</h3>
+<h3 id="23-implementation-details"><a class="markdownIt-Anchor" href="#23-implementation-details">#</a> 2.3. Implementation Details</h3>
 <p>实现细节就自行看论文啦，不作赘述。</p>
-<h2>3. Resources</h2>
+<h2 id="3-resources"><a class="markdownIt-Anchor" href="#3-resources">#</a> 3. Resources</h2>
 <ul>
 <li><a href="../papers/Faster_R-CNN.pdf">Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks</a></li>
 <li><a href="https://github.com/shaoqingren/faster_rcnn">GitHub (MATLAB)</a></li>

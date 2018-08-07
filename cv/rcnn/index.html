@@ -11,15 +11,38 @@
 </head>
 <body class="markdown-body">
 <p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
-<h1>R-CNN 学习笔记</h1>
+<h1 id="r-cnn-学习笔记"><a class="markdownIt-Anchor" href="#r-cnn-学习笔记">#</a> R-CNN 学习笔记</h1>
 <blockquote>
 <p>⏰ 2018-05-10 19:16:27<br/>
 👨🏻‍💻 painterdrown</p>
 </blockquote>
-<p>[TOC]</p>
-<h2>0. Abstract</h2>
+<p><ul class="markdownIt-TOC">
+<li><a href="#r-cnn-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0">R-CNN 学习笔记</a>
+<ul>
+<li><a href="#0-abstract">0. Abstract</a></li>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#2-architecture">2. Architecture</a></li>
+<li><a href="#3-object-detection">3. Object Detection</a>
+<ul>
+<li><a href="#31-module-design">3.1 Module Design</a>
+<ul>
+<li><a href="#311-region-proposals%E5%8C%BA%E5%9F%9F%E5%BB%BA%E8%AE%AE">3.1.1 Region Proposals（区域建议）</a></li>
+<li><a href="#312-feature-extraction">3.1.2 Feature Extraction</a></li>
+</ul>
+</li>
+<li><a href="#32-test-time-detection">3.2 Test-time Detection</a></li>
+<li><a href="#33-training">3.3 Training</a></li>
+</ul>
+</li>
+<li><a href="#4-visualization-ablation-modes-of-error">4. Visualization &amp; Ablation &amp; Modes of Error</a></li>
+<li><a href="#5-resources">5. Resources</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h2 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract">#</a> 0. Abstract</h2>
 <p>物体检测（Object Detection）的发展在 2012 年出现了停滞的现象，直到 R-CNN 方法的出现。在此之前，最好的方法是”The best-performing methods are complex ensemble systems that typically combine multiple low-level image features with high-level context.”，相比于这个方法，R-CNN 的特点是更为简单(simple)、可拓展性更强(scalable)。</p>
-<h2>1. Introduction</h2>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction">#</a> 1. Introduction</h2>
 <ol>
 <li>
 <p>one can apply high-capacity convolutional neural networks (CNNs) to bottom-up region proposals in order to localize and segment objects. 将一个高容量的 CNN（自底向上的区域建议）模型应用于图像物体定位和分割。</p>
@@ -36,7 +59,7 @@
 <li>R-CNN 中，主导错误模式的因素是 bounding-box regression method，因为这个方法能有效地提高物体定位的准确率。</li>
 <li>R-CNN 的计算效率比较高，主要体现在两部分：一是 SVM 中的矩阵向量乘法规模比较小；另外一部分则是 greedy non-maximum suppression。</li>
 </ul>
-<h2>2. Architecture</h2>
+<h2 id="2-architecture"><a class="markdownIt-Anchor" href="#2-architecture">#</a> 2. Architecture</h2>
 <p><img src="images/rcnn.png" alt="rcnn"></p>
 <ol>
 <li>Takes an input image. 输入图像。</li>
@@ -44,21 +67,21 @@
 <li>Compute features for each proposals using a large CNN. 将每一个区域输入 CNN，得到特征（固定长度）。</li>
 <li>Classifies each region using class-specific linear SVMs. 对于上一步得到的每一个区域的特征，用线性 SVM 进行分类。</li>
 </ol>
-<h2>3. Object Detection</h2>
-<h3>3.1 Module Design</h3>
-<h4>3.1.1 Region Proposals（区域建议）</h4>
+<h2 id="3-object-detection"><a class="markdownIt-Anchor" href="#3-object-detection">#</a> 3. Object Detection</h2>
+<h3 id="31-module-design"><a class="markdownIt-Anchor" href="#31-module-design">#</a> 3.1 Module Design</h3>
+<h4 id="311-region-proposals区域建议"><a class="markdownIt-Anchor" href="#311-region-proposals区域建议">#</a> 3.1.1 Region Proposals（区域建议）</h4>
 <p>已经有很多的论文提出了 category-independent（分类无关的）生产区域建议的方法。R-CNN 采用的是 Selective Search。</p>
-<h4>3.1.2 Feature Extraction</h4>
+<h4 id="312-feature-extraction"><a class="markdownIt-Anchor" href="#312-feature-extraction">#</a> 3.1.2 Feature Extraction</h4>
 <p>R-CNN 使用的是 Krizhevsky 的 CNN 模型，提取出 4096 维的特征向量。在此之前，对于每一个区域，先通过 Affine Transform 转换成 227 * 227 的正方形，再输入 CNN 模型。</p>
-<h3>3.2 Test-time Detection</h3>
+<h3 id="32-test-time-detection"><a class="markdownIt-Anchor" href="#32-test-time-detection">#</a> 3.2 Test-time Detection</h3>
 <p>测试过程：Selective Search -&gt; 2000 region proposals -&gt; CNN -&gt; SVM -&gt; greedy non-maximum suppression。</p>
 <p>做 greedy non-maximum suppression 是来过滤掉一些区域（这些区域的 IoU 大于某个学习得到的阈值，意思是如果两个区域重叠的部分过多，则淘汰掉得分较低的那一个）。</p>
 <p>特征矩阵(2000 * 4096) * SVM 权重矩阵(4096 * N，N 代表图片的分类总数) = 分类得分矩阵(2000 * N)。</p>
-<h3>3.3 Training</h3>
+<h3 id="33-training"><a class="markdownIt-Anchor" href="#33-training">#</a> 3.3 Training</h3>
 <p><strong>有监督的预训练</strong>。把 CNN 放在大的数据集上进行训练，这个数据集的 label 都是 image-level 的，意思就是说数据集中的图片的标注只是”这是一张关于猫的图片”，而不是”这张图片中在 xxx 有一只猫，在 xxx 有 xxx”。也就是说，这个训练集的标注信息跟我们做物体检测理想的训练集标注信息不一样。</p>
 <p><strong>Domain-specific fine-tuing（调优）</strong>。为了将上面的 CNN 应用于新的任务（物体检测）以及新的作用域(warped proposal windows)，用 SGD 来训练 CNN 的参数。将 CNN 中 ImageNet 1000-way 分类层替换成随机初始化的 (N+1)-way 分类层。除此之外，保留 CNN 的其他结构。将 IoU &gt;= 0.5 的区域视为正样本，否则视为负样本。SGD 的学习比率为 0.001，在每个 SGD 的迭代中，采样方法为：32 正样本 + 96 负样本（背景）= 128 mini batch。</p>
 <p><strong>物体类别分类器</strong>。如果某个区域中包含了汽车的一部分，如何将这个区域标定为汽车检测的正样本？解决的方法是 IoU overlap threshold。经过调试可以得知 threshold 取 0.3 时效果最好。</p>
-<h2>4. Visualization &amp; Ablation &amp; Modes of Error</h2>
+<h2 id="4-visualization-ablation-modes-of-error"><a class="markdownIt-Anchor" href="#4-visualization-ablation-modes-of-error">#</a> 4. Visualization &amp; Ablation &amp; Modes of Error</h2>
 <ol>
 <li>
 <p><strong>可视化学习特征</strong>。第一层的结果可以直接可视化，也很容易进行理解。对于其他的层，Zeiler and Fergus 提供了相应的方法。基本思想是对检测器的得分进行排序，而不进行平均化处理，而是关注它们的激活条件。</p>
@@ -76,7 +99,7 @@
 <p><strong>Bounding-box 回归</strong>。受到 DMP 的启发，R-CNN 训练一个线性回归模型来预测一个新的检测窗口（已知 pool5 层输出的特征之后）。</p>
 </li>
 </ol>
-<h2>5. Resources</h2>
+<h2 id="5-resources"><a class="markdownIt-Anchor" href="#5-resources">#</a> 5. Resources</h2>
 <ul>
 <li><a href="../papers/R-CNN.pdf">Rich feature hierarchies for accurate object detection and semantic segmentation Tech report (v5)</a></li>
 <li><a href="https://github.com/rbgirshick/rcnn">GitHub(MATLAB)</a></li>

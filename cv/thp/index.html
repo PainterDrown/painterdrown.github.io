@@ -11,15 +11,40 @@
 </head>
 <body class="markdown-body">
 <p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
-<h1>Towards High Performance Video Object Detection 学习笔记</h1>
+<h1 id="towards-high-performance-video-object-detection-学习笔记"><a class="markdownIt-Anchor" href="#towards-high-performance-video-object-detection-学习笔记">#</a> Towards High Performance Video Object Detection 学习笔记</h1>
 <blockquote>
 <p>⏰ 2018-06-03 00:21:48<br/>
 👨🏻‍💻 painterdrown</p>
 </blockquote>
-<p>[TOC]</p>
-<h2>0. Abstract</h2>
+<p><ul class="markdownIt-TOC">
+<li><a href="#towards-high-performance-video-object-detection-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0">Towards High Performance Video Object Detection 学习笔记</a>
+<ul>
+<li><a href="#0-abstract">0. Abstract</a></li>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#2-from-image-to-video-object-detection">2. From Image to Video Object Detection</a>
+<ul>
+<li>[2.1. <a href="../papers/DFF.pdf">Sparse Feature Propagation</a>](#21-sparse-feature-propagation)</li>
+<li>[2.2. <a href="../papers/FGFA.pdf">Dense Feature Aggregation</a>](#22-dense-feature-aggregation)</li>
+</ul>
+</li>
+<li><a href="#3-high-performance-video-object-detection">3. High Performance Video Object Detection</a>
+<ul>
+<li><a href="#31-sparsely-recursive-feature-aggregation">3.1. Sparsely Recursive Feature Aggregation</a></li>
+<li><a href="#32-spatially-adaptive-partial-feature-updating">3.2. Spatially-adaptive Partial Feature Updating</a></li>
+<li><a href="#33-temporally-adaptive-key-frame-scheduling">3.3. Temporally-adaptive Key Frame Scheduling</a></li>
+<li><a href="#34-inference">3.4. Inference</a></li>
+<li><a href="#35-training">3.5. Training</a></li>
+<li><a href="#36-network-architecture">3.6. Network Architecture</a></li>
+</ul>
+</li>
+<li><a href="#4-resources">4. Resources</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h2 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract">#</a> 0. Abstract</h2>
 <p>这篇论文是基于前面 <a href="../papers/DFF.pdf">DFF</a> 和 <a href="../papers/FGFA.pdf">FGFA</a> 的基础之上，提出了一个旨在多帧、端到端的 feature 及 cross-frame motion 的深度学习方法。提出了三项新技术来提高稳定性，优化速度和精度，以及在两者之间做权衡。</p>
-<h2>1. Introduction</h2>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction">#</a> 1. Introduction</h2>
 <p>之前的两项工作都有各自的缺点：<strong>DFF</strong> (Deep Feature Flow for Video Recognition) 中许多帧的特征都是由关键帧的特征传播得到的，只是一个近似的结果，存在着较大的误差（优势是速度）。<strong>FGFA</strong> (Flow-Guided Feature Aggregation for Video Object Detection) 则为了提升精度，多做了 motion estimation, feature propagation 和 aggregation，但是速度上又受限。</p>
 <p>两者共同的主旨：motion estimation 模块放在了网络中来计算，而且整个网络框架是端到端的。</p>
 <p>此论文要介绍的方法基于两者，效果更快、更准、更稳定。三项新技术分别是：</p>
@@ -34,82 +59,82 @@
 <p><strong>temporally-adaptive key frame scheduling</strong>（时间自适应关键帧调度）。之前的 DFF 是固定长度地选取关键帧（这样效果很一般），现在这项技术能预测一个关键帧的用途，即关键帧特征的质量。</p>
 </li>
 </ol>
-<h2>2. From Image to Video Object Detection</h2>
+<h2 id="2-from-image-to-video-object-detection"><a class="markdownIt-Anchor" href="#2-from-image-to-video-object-detection">#</a> 2. From Image to Video Object Detection</h2>
 <p>现在的图像目标检测已经比较成熟，一般分两步走：</p>
 <ol>
-<li>在 ImageNet 上预训练一个全卷积网络骨架 N~feat~，然后进行微调</li>
-<li>在 N~feat~ 算出来的特征图上，做 region classification 和 bounding box regression，这个网络 N~det~ 可分为两大类：</li>
+<li>在 ImageNet 上预训练一个全卷积网络骨架 N<sub>feat</sub>，然后进行微调</li>
+<li>在 N<sub>feat</sub> 算出来的特征图上，做 region classification 和 bounding box regression，这个网络 N<sub>det</sub> 可分为两大类：</li>
 </ol>
 <ul>
 <li><strong>sparse object proposals（稀疏目标建议）</strong>，比如 R-CNN 系列，<a href="../papers/DCNets.pdf">DCNets (Deformable Convolutional Networks)</a> 等</li>
 <li><strong>dense sliding windows（稠密滑动窗口）</strong>，比如有 <a href="../papers/SSD.pdf">SSD</a>, <a href="../papers/YOLO.pdf">YOLO</a> 等</li>
 </ul>
 <p>接下来要讲的是视频目标检测里面的两个基础方法。</p>
-<h3>2.1. <a href="../papers/DFF.pdf">Sparse Feature Propagation</a></h3>
+<h3 id="21-sparse-feature-propagation"><a class="markdownIt-Anchor" href="#21-sparse-feature-propagation">#</a> 2.1. <a href="../papers/DFF.pdf">Sparse Feature Propagation</a></h3>
 <p>讲的其实就是前面的 DFF，详见：</p>
 <blockquote>
 <p><a href="https://painterdrown.github.io/cv/fgfa">Flow-Guided Feature Aggregation for Video Object Detection 学习笔记</a></p>
 </blockquote>
 <p>不过这里加了一个前缀 <strong>sparse</strong>，要理解的话应该是其是用来修饰关键帧的。因为只让关键帧进入全卷积层去算特征图，而且关键帧的数目占所有视频帧的比例比较小，因此修饰其为“稀疏”。</p>
-<h3>2.2. <a href="../papers/FGFA.pdf">Dense Feature Aggregation</a></h3>
+<h3 id="22-dense-feature-aggregation"><a class="markdownIt-Anchor" href="#22-dense-feature-aggregation">#</a> 2.2. <a href="../papers/FGFA.pdf">Dense Feature Aggregation</a></h3>
 <p>同样的，讲的其实是上一篇的 FGFA，详见：</p>
 <blockquote>
 <p><a href="https://painterdrown.github.io/cv/fgfa">Flow-Guided Feature Aggregation for Video Object Detection 学习笔记</a></p>
 </blockquote>
 <p>前缀 <strong>dense</strong> 应当理解为：在对 reference frame 做聚集的时候，会聚集前后 K 帧的运动信息。这里是对 reference frame 周围的所有帧都做聚集，所以说是“稠密”。</p>
-<h2>3. High Performance Video Object Detection</h2>
+<h2 id="3-high-performance-video-object-detection"><a class="markdownIt-Anchor" href="#3-high-performance-video-object-detection">#</a> 3. High Performance Video Object Detection</h2>
 <p><img src="images/3tech.png" alt=""></p>
-<h3>3.1. Sparsely Recursive Feature Aggregation</h3>
+<h3 id="31-sparsely-recursive-feature-aggregation"><a class="markdownIt-Anchor" href="#31-sparsely-recursive-feature-aggregation">#</a> 3.1. Sparsely Recursive Feature Aggregation</h3>
 <blockquote>
 <p>Exploits the complementary property and integrates the methods in DFF &amp; FGFA, both accurate and fast.</p>
 </blockquote>
 <p>前面 FGFA 的特征聚集，是对每个帧都做了一遍，虽说检测精度有明显提升，但是速度很慢。而且也没必要每一帧都做聚集，这样就浪费了邻近帧之间的相似信息。这里提到的新技术将只在关键帧上面做 recursive feature aggregation（递归特征聚集）。</p>
 <p><img src="images/aggregation.png" alt=""></p>
-<p>上图是核心操作：假设我们已经聚集到了第 k 帧，接下里要聚集第 k^’^ 帧，则已经算好的中间量有：</p>
+<p>上图是核心操作：假设我们已经聚集到了第 k 帧，接下里要聚集第 k<sup>’</sup> 帧，则已经算好的中间量有：</p>
 <ul>
-<li>从 k 到 k^’^ 的聚集偏移量（上式右边的第一项）</li>
-<li>第 k^’^ 帧的全卷积特征图（上式右边的第二项）</li>
+<li>从 k 到 k<sup>’</sup> 的聚集偏移量（上式右边的第一项）</li>
+<li>第 k<sup>’</sup> 帧的全卷积特征图（上式右边的第二项）</li>
 </ul>
-<p>两者各自与权重矩阵点乘后相加，得到第 k^’^ 帧到聚集特征。总结一下就是：第 k 帧的特征聚集了前面的帧特征，然后又传播给下一个关键帧 k^’^。</p>
-<h3>3.2. Spatially-adaptive Partial Feature Updating</h3>
+<p>两者各自与权重矩阵点乘后相加，得到第 k<sup>’</sup> 帧到聚集特征。总结一下就是：第 k 帧的特征聚集了前面的帧特征，然后又传播给下一个关键帧 k<sup>’</sup>。</p>
+<h3 id="32-spatially-adaptive-partial-feature-updating"><a class="markdownIt-Anchor" href="#32-spatially-adaptive-partial-feature-updating">#</a> 3.2. Spatially-adaptive Partial Feature Updating</h3>
 <blockquote>
 <p>Extends the idea of adaptive feature computation from temporal domain to spatial domain, resulting in spatially-adaptive feature computation that is more effective.</p>
 </blockquote>
 <p>前面 DFF 的特征传播，虽说检测速度提升了不少，但是对于非关键帧的检测精度来说很差。</p>
 <p><img src="images/propagation.png" alt=""></p>
-<p>这个式子得到的是从关键帧 k 到邻近非关键帧 i 的特征传播，不是直接的 i 的特征。所以，要得到 i 比较好的特征，就必须保证上式的这个特征传播质量。作者提出了一个新的概念来做这个事情：feature temporal consistency Q~k→i~。这是在 N~flow~ 的输出层加一个 sibling branch 来做预测，得到这个值。</p>
+<p>这个式子得到的是从关键帧 k 到邻近非关键帧 i 的特征传播，不是直接的 i 的特征。所以，要得到 i 比较好的特征，就必须保证上式的这个特征传播质量。作者提出了一个新的概念来做这个事情：feature temporal consistency Q<sub>k→i</sub>。这是在 N<sub>flow</sub> 的输出层加一个 sibling branch 来做预测，得到这个值。</p>
 <p><img src="images/consistency.png" alt=""></p>
-<p>算出 Q~k→i~ 后，通过一个阈值 τ 来判断其是否与 i 帧相容。如果低于阈值，说明 F~k→i~ （表示从 k 传播到 i 得到的特征）的效果不好，因此需要另外对 i 帧“打个补丁”—— updating with real feature F~i~§，也就是用卷积重新计算 i 的特征图进行更新：</p>
+<p>算出 Q<sub>k→i</sub> 后，通过一个阈值 τ 来判断其是否与 i 帧相容。如果低于阈值，说明 F<sub>k→i</sub> （表示从 k 传播到 i 得到的特征）的效果不好，因此需要另外对 i 帧“打个补丁”—— updating with real feature F<sub>i</sub>§，也就是用卷积重新计算 i 的特征图进行更新：</p>
 <p><img src="images/updating.png" alt=""></p>
 <p>值得注意到是，特征更新的过程是可以逐层进行的（用第 n-1 层来更新第 n 层）。</p>
-<h3>3.3. Temporally-adaptive Key Frame Scheduling</h3>
+<h3 id="33-temporally-adaptive-key-frame-scheduling"><a class="markdownIt-Anchor" href="#33-temporally-adaptive-key-frame-scheduling">#</a> 3.3. Temporally-adaptive Key Frame Scheduling</h3>
 <blockquote>
 <p>Proposes adaptive key frame scheduling that further improves the efficiency of feature computation.</p>
 </blockquote>
-<p>3.2 中提到的 feature temporal consistency Q~k→i~，我们可以用来做关键帧判断。可以这样简单的理解：如果 Q~k→i~ 很小，说明第 k 帧与第 i 帧的相容性低，这也就说明了 i 很大概率是下一个关键帧。</p>
+<p>3.2 中提到的 feature temporal consistency Q<sub>k→i</sub>，我们可以用来做关键帧判断。可以这样简单的理解：如果 Q<sub>k→i</sub> 很小，说明第 k 帧与第 i 帧的相容性低，这也就说明了 i 很大概率是下一个关键帧。</p>
 <p><img src="images/is_key.png" alt=""></p>
-<h3>3.4. Inference</h3>
+<h3 id="34-inference"><a class="markdownIt-Anchor" href="#34-inference">#</a> 3.4. Inference</h3>
 <p><img src="images/code.png" alt=""></p>
-<h3>3.5. Training</h3>
+<h3 id="35-training"><a class="markdownIt-Anchor" href="#35-training">#</a> 3.5. Training</h3>
 <p>跟 FGFA 训练过程一样，由于考虑到内存问题，在 SGD 的 mini-batch 中只选取两帧（先取的作为关键帧，后取的作为非关键帧）。</p>
 <p>在做前向的过程中：</p>
 <ol>
-<li>N~feat~ 先算出关键帧 k 的特征图 F~k~ 以及非关键帧的特征图 F~i~</li>
-<li>N~flow~ 根据 F~k~, F~i~ 估计出 2D flow field M~i→k~ 以及 feature consistency indicator Q~k→i~</li>
+<li>N<sub>feat</sub> 先算出关键帧 k 的特征图 F<sub>k</sub> 以及非关键帧的特征图 F<sub>i</sub></li>
+<li>N<sub>flow</sub> 根据 F<sub>k</sub>, F<sub>i</sub> 估计出 2D flow field M<sub>i→k</sub> 以及 feature consistency indicator Q<sub>k→i</sub></li>
 <li>根据 Q~k→i 来进行 partial feature updating 算出邻近帧（除了 i 之外的其他帧）的特征图</li>
 <li>利用上面的 feature buffer 来做 recursive feature aggregation，对下一个关键帧进行聚集</li>
-<li>最后把这些聚集的结果丢进 N~det~，得到检测结果</li>
+<li>最后把这些聚集的结果丢进 N<sub>det</sub>，得到检测结果</li>
 </ol>
 <p>注意一下这里的损失函数为：</p>
 <p><img src="images/loss_function.png" alt=""></p>
-<p>式子右边第一项是 Faster R-CNN 中的损失函数 (multi-task: 同时考虑了分类和回归的效果)，右边第二项的目的是对重新计算的区域大小进行限制（训练的时候按照 1:3 的概率使 U~k→i~ = 0/1），以提高 propagating feature 和 recomputing feature 的质量。</p>
-<h3>3.6. Network Architecture</h3>
+<p>式子右边第一项是 Faster R-CNN 中的损失函数 (multi-task: 同时考虑了分类和回归的效果)，右边第二项的目的是对重新计算的区域大小进行限制（训练的时候按照 1:3 的概率使 U<sub>k→i</sub> = 0/1），以提高 propagating feature 和 recomputing feature 的质量。</p>
+<h3 id="36-network-architecture"><a class="markdownIt-Anchor" href="#36-network-architecture">#</a> 3.6. Network Architecture</h3>
 <ul>
 <li><strong>Flow network</strong>: FlowNet (“simple” version)</li>
 <li><strong>Feature network</strong>: ResNet-101</li>
 <li><strong>Detection network</strong>: R-FCN</li>
 </ul>
-<h2>4. Resources</h2>
+<h2 id="4-resources"><a class="markdownIt-Anchor" href="#4-resources">#</a> 4. Resources</h2>
 <ul>
 <li><a href="../papers/Towards_High_Performance_Video_Object_Detection.pdf">Towards High Performance Video Object Detection</a></li>
 </ul>

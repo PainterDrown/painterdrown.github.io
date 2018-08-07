@@ -11,21 +11,37 @@
 </head>
 <body class="markdown-body">
 <p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
-<h1>R-FCN 学习笔记</h1>
+<h1 id="r-fcn-学习笔记"><a class="markdownIt-Anchor" href="#r-fcn-学习笔记">#</a> R-FCN 学习笔记</h1>
 <blockquote>
 <p>⏰ 2018-05-30 21:07:51<br/>
 👨🏻‍💻 painterdrown</p>
 </blockquote>
-<p>[TOC]</p>
+<p><ul class="markdownIt-TOC">
+<li><a href="#r-fcn-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0">R-FCN 学习笔记</a>
+<ul>
+<li><a href="#0-abstract">0. Abstract</a></li>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#2-our-approach">2. Our Approach</a>
+<ul>
+<li><a href="#21-backbone-architecture">2.1. Backbone Architecture</a></li>
+<li><a href="#22-position-sensitive-score-maps-position-sensitive-roi-pooling">2.2. Position-sensitive Score maps &amp; Position-sensitive RoI Pooling</a></li>
+<li><a href="#23-training">2.3. Training</a></li>
+</ul>
+</li>
+<li><a href="#3-resources">3. Resources</a></li>
+</ul>
+</li>
+</ul>
+</p>
 <p>在 <a href="https://painterdrown.github.io/cv/faster-rcnn">Faster R-CNN</a> 里面就有提到 FCN（全卷积网络） 这个概念，是指 RPN (Region-based Proposal Networks) 加上一个做 regress region bounds &amp; objectness scores 的卷积层，就称为 FCN。这篇论文称其为 R-FCN，含义上没有什么大的差别。</p>
-<h2>0. Abstract</h2>
+<h2 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract">#</a> 0. Abstract</h2>
 <p>这里先是说 Fast/Faster R-CNN 做目标检测时做的计算太多（每张图片选很个 region，导致了比较多的重复计算），然后说 R-FCN 只需计算一整张图片的 convolutional feature。</p>
 <blockquote>
 <p>To achieve this goal, we propose position-sensitive score maps to address a dilemma between translation-invariance in image classification and translation-variance in object detection.</p>
 </blockquote>
 <p>作者说，想要在 translation-invariance in image classification 和 translation-variance in object detection 之间达到一个 “dilemma（进退两难的窘境）” 的状态（实话说我也很纳闷，先往下看再说）。这样一来，这个网络就能自然地采用一些其他的骨干网络，比如 <a href="../papers/ResNets.pdf">ResNets</a>用于目标检测。</p>
 <p>所以这里我的理解是，“dilemma” 是为了让 R-FCN 更好地适配不同的任务：加上 ResNet 就可以用于目标检测，加上 XXNet 就可以用作其他用途了。</p>
-<h2>1. Introduction</h2>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction">#</a> 1. Introduction</h2>
 <p>传统的目标检测网络可以根据 RoI 吃化层划分为两种类型：</p>
 <ol>
 <li>全卷积层计算可共享，但是独立于 RoIs（也就是说 RoI 层还要单独计算）</li>
@@ -38,24 +54,24 @@
 <p><img src="images/key_idea.png" alt=""></p>
 <p>回到正题，这篇论文提出了一个用于目标检测的框架——R-FCN。通过一系列的 position-sensitive score maps，将 translation variance 融入 FCN。每一个 score map 会对相对位置信息进行编码。在 FCN 的顶层，有一层 position-sensitive RoI pooling layer 对这些编码后的信息进行解译。R-FCN 是端到端的架构，所有的卷积层都共享一整张图片的计算。</p>
 <p>R-FCN 用 ResNet-101 作为网络骨干，在 VOC 上的 mAP 达到了 82%！测试时，每张图片耗时 170ms，可以说非常优秀了！</p>
-<h2>2. Our Approach</h2>
+<h2 id="2-our-approach"><a class="markdownIt-Anchor" href="#2-our-approach">#</a> 2. Our Approach</h2>
 <p>首先看下 R-FCN 的整体架构：</p>
 <p><img src="images/architecture.png" alt=""></p>
-<p>R-FCN 也是通过 RPN 来获取 region proposals，后面对于每一个 RoI，都输出 k^2^(C+1)-channel 个分类结果。这里的 k^2^ 是有讲究的：比如说 k = 3 时，k^2^ = 9 对于前面提到的 9 个 encoded 的相对位置 { top-left, top-center,
+<p>R-FCN 也是通过 RPN 来获取 region proposals，后面对于每一个 RoI，都输出 k<sup>2</sup>(C+1)-channel 个分类结果。这里的 k<sup>2</sup> 是有讲究的：比如说 k = 3 时，k<sup>2</sup> = 9 对于前面提到的 9 个 encoded 的相对位置 { top-left, top-center,
 top-right, …, bottom-right }。</p>
-<p>R-FCN 的最后一层是 position-sensitive 的 RoI 池化层（有选择性的），其聚合了前面卷积层的输出并且对于每个 RoI 都生成分类得分。参考 Introduction 中的那张图片，中，每一个 RoI 从前面的 k^2^ 个 score maps bank 中拿出自己每个位置的得分，然后进行投票，判断这个 RoI 是否属于某个分类。</p>
+<p>R-FCN 的最后一层是 position-sensitive 的 RoI 池化层（有选择性的），其聚合了前面卷积层的输出并且对于每个 RoI 都生成分类得分。参考 Introduction 中的那张图片，中，每一个 RoI 从前面的 k<sup>2</sup> 个 score maps bank 中拿出自己每个位置的得分，然后进行投票，判断这个 RoI 是否属于某个分类。</p>
 <p><img src="images/visualization1.png" alt=""></p>
 <p><img src="images/visualization2.png" alt=""></p>
-<h3>2.1. Backbone Architecture</h3>
-<p>ResNet-101（ImageNet 预训练得到） 去掉 average pooling layer 和最后的全连接层，留下卷积层来计算 feature maps。ResNet-101 最后一个卷积层是 2048 维的，为了降低维度，后面接上一个 1024 维的随机初始化的卷积层。然后再接上 k^2^(C + 1)-channel 的卷积层来生成 score maps。</p>
-<h3>2.2. Position-sensitive Score maps &amp; Position-sensitive RoI Pooling</h3>
-<p>每个 RoI 区域被分成 k×k 个网格，分别对应相对（相对于这个 RoI）的位置信息。每一个 RoI 从同一个 score maps 里面提出出各自的分类得分，每个 RoI 得到 k^2^ 个得分之后，取平均来判断这个 RoI 为分类的概率。</p>
+<h3 id="21-backbone-architecture"><a class="markdownIt-Anchor" href="#21-backbone-architecture">#</a> 2.1. Backbone Architecture</h3>
+<p>ResNet-101（ImageNet 预训练得到） 去掉 average pooling layer 和最后的全连接层，留下卷积层来计算 feature maps。ResNet-101 最后一个卷积层是 2048 维的，为了降低维度，后面接上一个 1024 维的随机初始化的卷积层。然后再接上 k<sup>2</sup>(C + 1)-channel 的卷积层来生成 score maps。</p>
+<h3 id="22-position-sensitive-score-maps-position-sensitive-roi-pooling"><a class="markdownIt-Anchor" href="#22-position-sensitive-score-maps-position-sensitive-roi-pooling">#</a> 2.2. Position-sensitive Score maps &amp; Position-sensitive RoI Pooling</h3>
+<p>每个 RoI 区域被分成 k×k 个网格，分别对应相对（相对于这个 RoI）的位置信息。每一个 RoI 从同一个 score maps 里面提出出各自的分类得分，每个 RoI 得到 k<sup>2</sup> 个得分之后，取平均来判断这个 RoI 为分类的概率。</p>
 <p><img src="images/roi.png" alt=""></p>
-<p>对于 bounding box regression 也是采用类似的做法：先生成 4k^2^ 的 regression maps（跟前面生成 k^2^(C + 1)-channel 的卷积层是 sibling 关系），再对每个 RoI 进行池化，投票。</p>
-<h3>2.3. Training</h3>
+<p>对于 bounding box regression 也是采用类似的做法：先生成 4k<sup>2</sup> 的 regression maps（跟前面生成 k<sup>2</sup>(C + 1)-channel 的卷积层是 sibling 关系），再对每个 RoI 进行池化，投票。</p>
+<h3 id="23-training"><a class="markdownIt-Anchor" href="#23-training">#</a> 2.3. Training</h3>
 <p>跟 Fast R-CNN 类似，损失函数同时考虑分类和回归两个 task。首先假设每张图片有 N 个 proposals，前向计算其 loss，对结果进行排序，取前 B 个 RoI。然后做反向传播的时候只做这 B 个。由于每个 RoI 的计算时间可以忽略不计，因此前向的计算基本跟 N 没有关系。</p>
 <p>R-FCN 使用的 0.0005 的 decay 和 0.9 的 momentum。默认地，训练只做一个图像尺寸，每张图片 resize 使其较短的边都是 600px。When doing fine-tune, using a learning rate of 0.001 for 20k mini-batches and 0.0001 for 10k mini-batches on VOC.</p>
-<h2>3. Resources</h2>
+<h2 id="3-resources"><a class="markdownIt-Anchor" href="#3-resources">#</a> 3. Resources</h2>
 <ul>
 <li><a href="../papers/R-FCN.pdf">R-FCN: Object Detection via Region-based Fully Convolutional Networks</a></li>
 <li><a href="https://github.com/daijifeng001/r-fcn">GitHub (MATLAB)</a></li>

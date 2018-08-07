@@ -11,20 +11,38 @@
 </head>
 <body class="markdown-body">
 <p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
-<h1>Flow-Guided Feature Aggregation for Video Object Detection 学习笔记</h1>
+<h1 id="flow-guided-feature-aggregation-for-video-object-detection-学习笔记"><a class="markdownIt-Anchor" href="#flow-guided-feature-aggregation-for-video-object-detection-学习笔记">#</a> Flow-Guided Feature Aggregation for Video Object Detection 学习笔记</h1>
 <blockquote>
 <p>⏰ 2018-06-02 09:40:36<br/>
 👨🏻‍💻 painterdrown</p>
 </blockquote>
-<p>[TOC]</p>
-<h2>0. Abstract</h2>
+<p><ul class="markdownIt-TOC">
+<li><a href="#flow-guided-feature-aggregation-for-video-object-detection-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0">Flow-Guided Feature Aggregation for Video Object Detection 学习笔记</a>
+<ul>
+<li><a href="#0-abstract">0. Abstract</a></li>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#2-related-work">2. Related Work</a></li>
+<li><a href="#3-flow-guided-feature-aggregation">3. Flow Guided Feature Aggregation</a>
+<ul>
+<li><a href="#31-model-design">3.1. Model Design</a></li>
+<li><a href="#32-training-and-inference">3.2. Training and Inference</a></li>
+<li><a href="#33-network-architecture">3.3. Network Architecture</a></li>
+</ul>
+</li>
+<li><a href="#4-experiments">4. Experiments</a></li>
+<li><a href="#5-resources">5. Resources</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h2 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract">#</a> 0. Abstract</h2>
 <p>目前的视频目标检测网络都不是端到端的，作者提出了一个叫 flow-guided feature aggregation（流导向特征聚集），一个端到端的深度学习框架，加下来我简称为 <strong>FGFA</strong>。</p>
 <blockquote>
 <p>It leverages temporal coherence on feature level instead.</p>
 </blockquote>
 <p>这句话的意思是说，FFA 关注如何利用 feature level 的时间连贯性信息，并且利用这些信息来达到好的检测效果。</p>
 <p>FFA 聚集了同一运动路径 (motion path) 上的特征信息。</p>
-<h2>1. Introduction</h2>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction">#</a> 1. Introduction</h2>
 <p>目前最帅的图像目标检测框架基本都是 <strong>Deep Convolutional Neural Networks</strong>，但是它在视频帧中表现欠佳——原因是视频帧中 <em>motion blur</em>（图像运动的区域容易模糊） 的现象比较明显，还有 <em>video defocus</em>，<em>rare poses</em> 等原因。</p>
 <blockquote>
 <p>The performance improvement is from heuristic post-processing instead of principled learning.</p>
@@ -48,7 +66,7 @@
 </li>
 </ul>
 <p>另外，FGFA 是 feature level 的，若是与一些 box level 的方法结合互补，可以提升效果。</p>
-<h2>2. Related Work</h2>
+<h2 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work">#</a> 2. Related Work</h2>
 <ul>
 <li>
 <p><strong>Object detection from image</strong>。这里提到了 R-FCN，其他不作赘述。</p>
@@ -66,23 +84,23 @@
 <p><strong>Visual tracking</strong>。现在基本都用深度 CNN 来做目标追踪。而目标追踪与目标检测又有区别：前者会先假设目标的初始位置，且不要求做分类。</p>
 </li>
 </ul>
-<h2>3. Flow Guided Feature Aggregation</h2>
-<h3>3.1. Model Design</h3>
-<p>首先，用深层卷积计算出 reference frame I~i~ 的特征，然后通过 <a href="../papers/FlowNet.pdf">FlowNet</a> <strong>N~flow~</strong> 来推导出其 neighbor frame I~j~ 的特征，紧接着这个特征再做一个 warping。</p>
+<h2 id="3-flow-guided-feature-aggregation"><a class="markdownIt-Anchor" href="#3-flow-guided-feature-aggregation">#</a> 3. Flow Guided Feature Aggregation</h2>
+<h3 id="31-model-design"><a class="markdownIt-Anchor" href="#31-model-design">#</a> 3.1. Model Design</h3>
+<p>首先，用深层卷积计算出 reference frame I<sub>i</sub> 的特征，然后通过 <a href="../papers/FlowNet.pdf">FlowNet</a> <strong>N<sub>flow</sub></strong> 来推导出其 neighbor frame I<sub>j</sub> 的特征，紧接着这个特征再做一个 warping。</p>
 <p>得到一系列的 warping 后的特征，就拿来做 <strong>feature aggregation</strong>。聚合后的特征包含了如 illuminations/viewpoints/poses/non-rigid 等信息。</p>
 <p><img src="images/aggregation.png" alt=""></p>
 <p>特征聚集是通过加权相加得到的，离 reference frame 越近的帧，权重越大。用 <strong>cosine similarity metric</strong> 来衡量变性后特征与 reference frame 的特征之间的相似度。要注意的是，计算相似度不是直接用的 feature，而是把 feature 再经过一个 <strong>tiny fully convolutional network</strong>，目的是将特征投影成一个 new embedding（我也不懂是什么），这样能更方便后面的网络去做相似性计算。</p>
-<h3>3.2. Training and Inference</h3>
+<h3 id="32-training-and-inference"><a class="markdownIt-Anchor" href="#32-training-and-inference">#</a> 3.2. Training and Inference</h3>
 <p>Inference 的伪代码如下，可以描述为：</p>
 <ol>
-<li>首先用 N~feat~ 对视频的每一帧都算出其卷积特征图</li>
+<li>首先用 N<sub>feat</sub> 对视频的每一帧都算出其卷积特征图</li>
 <li>依次将每一帧作为 reference frame，通过上述的方法算出其聚集后的特征</li>
-<li>将聚集后的特征放进 N~det~ 进行目标检测</li>
+<li>将聚集后的特征放进 N<sub>det</sub> 进行目标检测</li>
 <li>更新 <strong>feature buffer</strong>，这里对应伪代码的第 13 行。我思考了一下终于知道这一步的意义：算法一开始的时候，不是直接把所有帧的特征都算出来了，因为那样子太占内存。因此只虚先算前 K 个特征，维护一个长度为 K 的 feature buffer。在每一轮迭代之后，都会计算下一个 feature 塞进 buffer 里面。</li>
 </ol>
 <p><img src="images/code.png" alt=""></p>
 <p>整个 FGFA 架构是可导而且端到端的。训练的时候，由于内存的限制，K 只能取一个比较小的值 (K = 2)。值得注意的是，这里有一个 <strong>temporal dropout</strong> 的说法。不是说训练的时候只在前后各两个邻近帧之间采样，采样的范围是跟前面的 inference 的范围一样，只是训练的时候只前后各采样 2 帧，所以这里要理解好 K = 2 的含义。</p>
-<h3>3.3. Network Architecture</h3>
+<h3 id="33-network-architecture"><a class="markdownIt-Anchor" href="#33-network-architecture">#</a> 3.3. Network Architecture</h3>
 <ul>
 <li><strong>Flow network</strong>: FlowNet (“simple” version)</li>
 <li><strong>Feature network</strong>: ResNet (-50 and -101) and Inception-Resnet</li>
@@ -95,15 +113,15 @@
 </li>
 <li><strong>Detection network</strong>: R-FCN</li>
 </ul>
-<h2>4. Experiments</h2>
+<h2 id="4-experiments"><a class="markdownIt-Anchor" href="#4-experiments">#</a> 4. Experiments</h2>
 <p>参考以下两篇论文，训练的时候要用到 ImageNet DET 和 VID 两个数据集。</p>
 <blockquote>
 <p><a href="../papers/T-CNN.pdf">T-cnn: Tubelets with convolutional neural networks for object detection from videos.</a><br/>
-[Multi-Class Multi-Object Tracking using Changing Point Detection](…/papers/Multi-Class_Multi-Object_Tracking_using_Changing Point_Detection.pdf)</p>
+<a href="../papers/Multi-Class_Multi-Object_Tracking_using_Changing_Point_Detection.pdf">Multi-Class Multi-Object Tracking using Changing Point Detection</a></p>
 </blockquote>
 <p>训练分两个阶段：</p>
 <ol>
-<li>使用 DET 数据集来训练 N~feat 和 N~det~（使用的标注数据是 VID 中的 30 个分类），相关细节：</li>
+<li>使用 DET 数据集来训练 N~feat 和 N<sub>det</sub>（使用的标注数据是 VID 中的 30 个分类），相关细节：</li>
 </ol>
 <pre><code>+ 使用了 SGD (one image at each mini-batch)
 + 使用 4 个 GPU 来跑 120K 次迭代 (each GPU holding one mini-batch)
@@ -117,10 +135,10 @@
 </code></pre>
 <p>在训练和测试的时候，图像会进行缩放：</p>
 <ul>
-<li>在 N~feat~ 中，缩放成短边为 600px</li>
-<li>在 N~flow~ 中，缩放成短边为 300px</li>
+<li>在 N<sub>feat</sub> 中，缩放成短边为 600px</li>
+<li>在 N<sub>flow</sub> 中，缩放成短边为 300px</li>
 </ul>
-<h2>5. Resources</h2>
+<h2 id="5-resources"><a class="markdownIt-Anchor" href="#5-resources">#</a> 5. Resources</h2>
 <ul>
 <li><a href="../papers/FGFA.pdf">Flow-Guided Feature Aggregation for Video Object Detection</a></li>
 <li><a href="https://github.com/msracver/Flow-Guided-Feature-Aggregation">GitHub (python)</a></li>

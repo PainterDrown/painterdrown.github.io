@@ -11,15 +11,32 @@
 </head>
 <body class="markdown-body">
 <p><a href="https://painterdrown.github.io">painterdrown Blog</a> - <a href="https://painterdrown.github.io/cv">painterdrown CV</a></p>
-<h1>MobileNetV2 学习笔记</h1>
+<h1 id="mobilenetv2-学习笔记"><a class="markdownIt-Anchor" href="#mobilenetv2-学习笔记">#</a> MobileNetV2 学习笔记</h1>
 <blockquote>
 <p>⏰ 2018-05-28 19:16:22<br/>
 👨🏻‍💻 painterdrown</p>
 </blockquote>
-<p>[TOC]</p>
-<h2>0. Abstract</h2>
+<p><ul class="markdownIt-TOC">
+<li><a href="#mobilenetv2-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0">MobileNetV2 学习笔记</a>
+<ul>
+<li><a href="#0-abstract">0. Abstract</a></li>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#2-preliminaries%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C-discussion-and-intuition%E7%9B%B4%E8%A7%89">2. Preliminaries（准备工作）, Discussion and Intuition（直觉）</a>
+<ul>
+<li><a href="#21-depthwise-separable-convolutions">2.1. Depthwise Separable Convolutions</a></li>
+<li><a href="#22-linear-bottlenecks%E7%BA%BF%E6%80%A7%E7%93%B6%E9%A2%88">2.2. Linear Bottlenecks（线性瓶颈）</a></li>
+<li><a href="#23-inverted-residuals%E5%8F%8D%E5%90%91%E6%AE%8B%E5%B7%AE">2.3. Inverted residuals（反向残差）</a></li>
+</ul>
+</li>
+<li><a href="#3-model-architecture">3. Model Architecture</a></li>
+<li><a href="#4-resources">4. Resources</a></li>
+</ul>
+</li>
+</ul>
+</p>
+<h2 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract">#</a> 0. Abstract</h2>
 <p>这篇论文介绍了一种新的移动神经网络架构 <strong>MobileNetV2</strong>，提升了多任务的表现以及涵盖了不同大小的模型。SSDLite 用于目标检测，MobileDeepLabv3 用于语义分割。MobileNetV2 是基于残差结构，其中间拓展层使用了非线性轻量深度卷积来对 feature map 进行过滤。MobileNetV2 支持对输入输出域做解藕。</p>
-<h2>1. Introduction</h2>
+<h2 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction">#</a> 1. Introduction</h2>
 <p>意思大概是，目前最前沿的用于目标检测的神经网络模型，都需要大量的计算资源，因此不适用于移动设备和嵌入式设备。MobileNetV2 应运而生，有三个特点：</p>
 <ol>
 <li>无需大量的计算</li>
@@ -34,13 +51,13 @@
 <p>linear bottlenecks，为了避免 relu 对特征的破坏（我们知道 relu 函数只取输入的非负值，且认为这个行为导致了信息损失），在 residual block 的 Eltwise sum 之前的那个 1*1 conv 不再采用 relu。</p>
 </blockquote>
 <p>这个方法先是接收一个低维、压缩的特征表示，然后拓展其到高维，在用一个轻量深度卷积进行过滤。过滤后得到的特征会被一个线性卷积映射回低维的表示。</p>
-<h2>2. Preliminaries（准备工作）, Discussion and Intuition（直觉）</h2>
-<h3>2.1. Depthwise Separable Convolutions</h3>
+<h2 id="2-preliminaries准备工作-discussion-and-intuition直觉"><a class="markdownIt-Anchor" href="#2-preliminaries准备工作-discussion-and-intuition直觉">#</a> 2. Preliminaries（准备工作）, Discussion and Intuition（直觉）</h2>
+<h3 id="21-depthwise-separable-convolutions"><a class="markdownIt-Anchor" href="#21-depthwise-separable-convolutions">#</a> 2.1. Depthwise Separable Convolutions</h3>
 <blockquote>
 <p>参考：<a href="https://painterdrown.github.io/cv/mobilenet">MobileNets 学习笔记</a> 中的 Depthwise Separable Convolution</p>
 </blockquote>
 <p>这里的深度可分离卷积跟 MobileNets 的唯一区别在于：MobileNets 的输入输出都是正方形的 feature，而 MobileNetV2 则允许长宽不一样。</p>
-<h3>2.2. Linear Bottlenecks（线性瓶颈）</h3>
+<h3 id="22-linear-bottlenecks线性瓶颈"><a class="markdownIt-Anchor" href="#22-linear-bottlenecks线性瓶颈">#</a> 2.2. Linear Bottlenecks（线性瓶颈）</h3>
 <p><img src="images/bottleneck1.png" alt=""></p>
 <p><img src="images/bottleneck2.png" alt=""></p>
 <p>这一段不太好理解，我感觉就是 ReLU 会损失负数的那部分信息，因此要想办法换成不会损失信息的线性激活函数。作者提到两点：</p>
@@ -49,7 +66,7 @@
 <li>如果 manifold of interest 是处于低维子空间中，经过 ReLU 时就不会损失信息。</li>
 </ol>
 <p>因此，如果 manifold of interest 是低维的话，我们就可以通过往卷积块插入 linear bottleneck 层捕获之。</p>
-<h3>2.3. Inverted residuals（反向残差）</h3>
+<h3 id="23-inverted-residuals反向残差"><a class="markdownIt-Anchor" href="#23-inverted-residuals反向残差">#</a> 2.3. Inverted residuals（反向残差）</h3>
 <p><img src="images/residual.png" alt=""></p>
 <p>这一段更是看得我云里雾里的，遂果断查博客。</p>
 <blockquote>
@@ -60,7 +77,7 @@
 <blockquote>
 <p><a href="https://www.zhihu.com/question/265709710/answer/297996096">【知乎】如何评价mobilenet v2 ?</a></p>
 </blockquote>
-<h2>3. Model Architecture</h2>
+<h2 id="3-model-architecture"><a class="markdownIt-Anchor" href="#3-model-architecture">#</a> 3. Model Architecture</h2>
 <ol>
 <li>全卷积层，有 32 个过滤器</li>
 <li>19 residual bottleneck layers</li>
@@ -69,7 +86,7 @@
 <li>训练时用 dropout &amp; batch normalization 来防止过拟合</li>
 <li>除了第一层，剩下的网络都用了 constant expansion rate（小网络要用小 ER，大网络要用大 ER）</li>
 </ol>
-<h2>4. Resources</h2>
+<h2 id="4-resources"><a class="markdownIt-Anchor" href="#4-resources">#</a> 4. Resources</h2>
 <ul>
 <li><a href="../papers/MobileNetV2.pdf">MobileNetV2: Inverted Residuals and Linear Bottlenecks</a></li>
 <li><a href="https://github.com/chuanqi305/MobileNetv2-SSDLite">chuanqi305/MobileNetv2-SSDLite（非官方）</a></li>
